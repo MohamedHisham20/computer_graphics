@@ -115,7 +115,66 @@ void drawHouse(float x, float y, float width, float height) {
     glEnd();
 }
 
+// Function to draw the background (sky)
+void drawSky() {
+    glColor3f(0.5f, 0.2f, 0.8f); // Purple sky
+    glBegin(GL_QUADS);
+    glVertex3f(-1.0f, 1.0f, 0.0f);  // Top-left
+    glVertex3f(1.0f, 1.0f, 0.0f);   // Top-right
+    glVertex3f(1.0f, 0.0f, 0.0f);   // Bottom-right
+    glVertex3f(-1.0f, 0.0f, 0.0f);  // Bottom-left
+    glEnd();
+}
 
+// Function to draw the volcano
+void drawVolcano() {
+    glColor3f(0.5f, 0.5f, 0.5f); // Gray volcano
+    glBegin(GL_TRIANGLES);
+    glVertex3f(0.0f, 0.0f, 0.0f);   // Peak of the volcano (center)
+    glVertex3f(-0.5f, -0.8f, 0.0f); // Bottom-left
+    glVertex3f(0.5f, -0.8f, 0.0f);  // Bottom-right
+    glEnd();
+}
+
+// Function to draw the brown mountain
+void drawMountain() {
+    glColor3f(0.6f, 0.3f, 0.1f);  // Brown mountain
+    glBegin(GL_TRIANGLES);
+    glVertex3f(0.5f, -0.2f, 0.0f);   // Peak of the mountain
+    glVertex3f(0.2f, -0.8f, 0.0f);   // Bottom-left
+    glVertex3f(0.8f, -0.8f, 0.0f);   // Bottom-right
+    glEnd();
+}
+
+// Function to draw the eruption
+void drawEruption() {
+    // Red outer explosion
+    glColor3f(1.0f, 0.0f, 0.0f);  // Red explosion
+    glBegin(GL_TRIANGLES);
+    glVertex3f(0.0f, 0.0f, 0.0f);    // Peak of volcano
+    glVertex3f(-0.1f, 0.3f, 0.0f);   // Left explosion
+    glVertex3f(0.1f, 0.3f, 0.0f);    // Right explosion
+    glEnd();
+
+    // Yellow inner explosion
+    glColor3f(1.0f, 1.0f, 0.0f);  // Yellow explosion
+    glBegin(GL_TRIANGLES);
+    glVertex3f(0.0f, 0.0f, 0.0f);   // Peak of volcano
+    glVertex3f(-0.05f, 0.25f, 0.0f); // Left inner explosion
+    glVertex3f(0.05f, 0.25f, 0.0f);  // Right inner explosion
+    glEnd();
+}
+
+// Function to draw the lake
+void drawLake() {
+    glColor3f(0.0f, 0.7f, 1.0f); // Light blue for lake
+    glBegin(GL_QUADS);
+    glVertex3f(-1.0f, -0.8f, 0.0f);  // Bottom-left
+    glVertex3f(1.0f, -0.8f, 0.0f);   // Bottom-right
+    glVertex3f(1.0f, -1.0f, 0.0f);   // Top-right
+    glVertex3f(-1.0f, -1.0f, 0.0f);  // Top-left
+    glEnd();
+}
 
 void drawWindmill(float x, float y, float scale) {
     // Draw the base of the windmill
@@ -199,6 +258,12 @@ void drawScene(void) {
 
     // Draw elements in the scene
     drawSun(0.6f, 0.8f, 0.1f);
+
+    //drawSky();
+    drawVolcano();
+    drawMountain();
+    drawEruption();
+    //drawLake();
 
     drawGrassMountain(-0.8f, -0.4f, 0.5f, 0.3f); // Adjusted Y position
     drawGrassMountain(-0.3f, -0.4f, 0.6f, 0.35f); // Adjusted Y position
