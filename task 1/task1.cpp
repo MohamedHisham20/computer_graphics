@@ -327,9 +327,106 @@ void drawRiver(float x, float y, float width, float height) {
     glEnd();
 }
 
+void drawPlane(float x, float y, float width, float height) {
+    glColor3f(1.0, 0.5, 0.0);
+
+    // Draw plan1 with specified vertices counterclockwise.
+    glBegin(GL_POLYGON);
+    glVertex3f(x, y, 0.0);	// x, y, z
+    glVertex3f(x + width, y, 0.0);
+    glVertex3f(x + width, y + height, 0.0);
+    glVertex3f(x + width / 3, y + height, 0.0);
+    glEnd();
+
+    //// setting the drawing color
+    glColor3f(1.0, 0.0, 0.0);
+
+    // Draw windows on plan1 with specified vertices counterclockwise.
+    glBegin(GL_POLYGON);
+    glVertex3f(x + 0.028, y, 0.0);	// x, y, z
+    glVertex3f(x + 0.037, y, 0.0);
+    glVertex3f(x + 0.037, y + 0.011, 0.0);
+    glVertex3f(x + 0.028, y + 0.011, 0.0);
+    glEnd();
+
+    // Draw windows on plan1 with specified vertices counterclockwise.
+    glBegin(GL_POLYGON);
+    glVertex3f(x + 0.05, y + 0.0033, 0.0);	// x, y, z
+    glVertex3f(x + 0.063, y + 0.0033, 0.0);
+    glVertex3f(x + 0.063, y + 0.011, 0.0);
+    glVertex3f(x + 0.05, y + 0.011, 0.0);
+    glEnd();
+
+    // Draw windows on plan1 with specified vertices counterclockwise.
+    glBegin(GL_POLYGON);
+    glVertex3f((x + 0.02) + 0.05, y + 0.0033, 0.0);	// x, y, z
+    glVertex3f((x + 0.02) + 0.063, y + 0.0033, 0.0);
+    glVertex3f((x + 0.02) + 0.063, y + 0.011, 0.0);
+    glVertex3f((x + 0.02) + 0.05, y + 0.011, 0.0);
+    glEnd();
+
+    // Draw windows on plan1 with specified vertices counterclockwise.
+    glBegin(GL_POLYGON);
+    glVertex3f(x + 0.08, (y + 0.025), 0.0);	// x, y, z
+    glVertex3f(x + 0.1, (y + 0.025), 0.0);
+    glVertex3f(x + 0.1, (y + 0.025) + 0.02, 0.0);
+    glEnd();
+
+
+    // Draw plan2 with specified vertices counterclockwise.
+    float x_plan2 = 0.25;
+    float y_plan2 = -0.07;
+
+    glColor3f(1.0, 1.0, 1.0);
+
+    // Draw window on plan2 with specified vertices counterclockwise.
+    glBegin(GL_POLYGON);
+    glVertex3f(x + x_plan2, y + y_plan2, 0.0);	// x, y, z
+    glVertex3f(x + x_plan2 + width, y + y_plan2, 0.0);
+    glVertex3f(x + x_plan2 + width, y + y_plan2 + height, 0.0);
+    glVertex3f(x + x_plan2 + (width / 3), y + y_plan2 + height, 0.0);
+    glEnd();
+
+    //// setting the drawing color
+    glColor3f(1.0, 0.0, 0.0);
+
+    // Draw windows on plan2 with specified vertices counterclockwise.
+    glBegin(GL_POLYGON);
+    glVertex3f(x + x_plan2 + 0.028, y + y_plan2, 0.0);	// x, y, z
+    glVertex3f(x + x_plan2 + 0.037, y + y_plan2, 0.0);
+    glVertex3f(x + x_plan2 + 0.037, y + y_plan2 + 0.011, 0.0);
+    glVertex3f(x + x_plan2 + 0.028, y + y_plan2 + 0.011, 0.0);
+    glEnd();
+
+    // Draw windows on plan2 with specified vertices counterclockwise.
+    glBegin(GL_POLYGON);
+    glVertex3f(x + x_plan2 + 0.05, y + y_plan2 + 0.0033, 0.0);	// x, y, z
+    glVertex3f(x + x_plan2 + 0.063, y + y_plan2 + 0.0033, 0.0);
+    glVertex3f(x + x_plan2 + 0.063, y + y_plan2 + 0.011, 0.0);
+    glVertex3f(x + x_plan2 + 0.05, y + y_plan2 + 0.011, 0.0);
+    glEnd();
+
+    // Draw windows on plan2 with specified vertices counterclockwise.
+    glBegin(GL_POLYGON);
+    glVertex3f((x + x_plan2 + 0.02) + 0.05, y + y_plan2 + 0.0033, 0.0);	// x, y, z
+    glVertex3f((x + x_plan2 + 0.02) + 0.063, y + y_plan2 + 0.0033, 0.0);
+    glVertex3f((x + x_plan2 + 0.02) + 0.063, y + y_plan2 + 0.0033, 0.0);
+    glVertex3f((x + x_plan2 + 0.02) + 0.063, y + y_plan2 + 0.011, 0.0);
+    glVertex3f((x + x_plan2 + 0.02) + 0.05, y + y_plan2 + 0.011, 0.0);
+    glEnd();
+
+    // Draw windows on plan2 with specified vertices counterclockwise.
+    glBegin(GL_POLYGON);
+    glVertex3f(x + x_plan2 + 0.08, (y + y_plan2 + 0.025), 0.0);	// x, y, z
+    glVertex3f(x + x_plan2 + 0.1, (y + y_plan2 + 0.025), 0.0);
+    glVertex3f(x + x_plan2 + 0.1, (y + y_plan2 + 0.025) + 0.02, 0.0);
+    glEnd();
+
+}
+
 void drawScene(void) {
     glClear(GL_COLOR_BUFFER_BIT);
-    glClearColor(0.5f, 0.8f, 1.0f, 1.0f); // Sky blue color
+    //glClearColor(0.5f, 0.8f, 1.0f, 1.0f); // Sky blue color
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -388,6 +485,9 @@ void drawScene(void) {
     drawBoat(-0.6, -0.55, 1.0);  // Boat centered at (-0.5, -0.5) with a large scale
     drawBoat(0.0, -0.7, 0.5);   // A smaller boat
 
+    // Call the drawPlane function 
+    drawPlane(-0.33, 0.7, 0.1, 0.025);
+
     glFlush();
 }
 
@@ -404,4 +504,3 @@ int main(int argc, char** argv) {
 
     return 0;
 }
-
