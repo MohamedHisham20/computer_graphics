@@ -1,3 +1,5 @@
+#include <GL/glew.h>
+#include <GL/freeglut.h>
 #include <GL/glut.h>
 #include <GL/freeglut.h>
 #include <cmath>
@@ -9,7 +11,7 @@
 void drawCircle(float centerX, float centerY, float radius)
 {
     glBegin(GL_TRIANGLE_FAN);
-    glVertex2f(centerX, centerY);  // Center of the circle
+    glVertex2f(centerX, centerY);
 
     for (int i = 0; i <= 300; i++)
     {
@@ -31,15 +33,15 @@ void drawOval(float centerX, float centerY, float radiusX, float radiusY)
     for (int i = 0; i <= 300; i++)
     {
         float angle = 2.0f * M_PI * i / 300;
-        float x = radiusX * cos(angle);  // Horizontal radius
-        float y = radiusY * sin(angle);  // Vertical radius
+        float x = radiusX * cos(angle);
+        float y = radiusY * sin(angle);
         glVertex2f(centerX + x, centerY + y);
     }
 
     glEnd();
 }
 
-void createCloud(float x, float y, float scale)  //x,y are coordinates of the lower center of the cloud
+void createCloud(float x, float y, float scale)
 {
     glColor3f(1.0, 1.0, 1.0); //white cloud
     //bottom oval
@@ -55,7 +57,7 @@ void createCloud(float x, float y, float scale)  //x,y are coordinates of the lo
 
 void createTree(float x, float y, float scale)
 {
-    //tree part:
+
     glColor3f(0.0, 1.0, 0.0);  //grean 
     //center 
     drawCircle(x, y, 9.5 * scale);
@@ -65,7 +67,7 @@ void createTree(float x, float y, float scale)
     drawCircle(x + 10, y, 6 * scale);
 
     //wood branch
-    glColor3f(0.65f, 0.16f, 0.16f);  // Brown color (RGB)
+    glColor3f(0.65f, 0.16f, 0.16f);
     glBegin(GL_POLYGON);
     glVertex3f(x - (1.5 * scale), y - (8 * scale), 0.2);
     glVertex3f(x + (1.5 * scale), y - (8 * scale), 0.2);
@@ -78,7 +80,7 @@ void createTree(float x, float y, float scale)
 
 void drawSun(float SunPositionX, float SunPositionY, float sunRadius) {
     glColor3f(1.0f, 1.0f, 0.0f);
-    int numberOfTriangles = 100; // Circle is a number of triangles rotated
+    int numberOfTriangles = 100;
     glBegin(GL_TRIANGLE_FAN);
     glVertex3f(SunPositionX, SunPositionY, 1);
     for (int i = 0; i <= numberOfTriangles; i++) {
@@ -92,7 +94,7 @@ void drawSun(float SunPositionX, float SunPositionY, float sunRadius) {
 }
 
 void drawGrassMountain(float MountainGrassPositionX, float MountainGrassPositionY, float MountainWidth, float MountainHeight) {
-    glColor3f(0.0f, 0.5f, 0.0f);  // Dark green color for the mountains
+    glColor3f(0.0f, 0.5f, 0.0f);
     int numberOfTriangles = 50;
 
     float leftCircleX = MountainGrassPositionX - (MountainWidth * 0.2f);
@@ -133,16 +135,16 @@ void drawFish(float fishX, float fishY, float fishBody) {
     glEnd();
 
     glBegin(GL_TRIANGLES);
-    glVertex2f(fishX - 0.05f * fishBody, fishY);                 // Tail base
-    glVertex2f(fishX - 0.08f * fishBody, fishY + 0.03f * fishBody); // Tail top
-    glVertex2f(fishX - 0.08f * fishBody, fishY - 0.03f * fishBody); // Tail bottom
+    glVertex2f(fishX - 0.05f * fishBody, fishY);
+    glVertex2f(fishX - 0.08f * fishBody, fishY + 0.03f * fishBody);
+    glVertex2f(fishX - 0.08f * fishBody, fishY - 0.03f * fishBody);
     glEnd();
 }
 
 
 void drawHouse(float x, float y, float width, float height) {
-    // Draw the main body of the house
-    glColor3f(1.0, 0.9, 0.7); // Light color for the house
+
+    glColor3f(1.0, 0.9, 0.7);
     glBegin(GL_POLYGON);
     glVertex3f(x, y, 0.0);
     glVertex3f(x + width, y, 0.0);
@@ -150,15 +152,15 @@ void drawHouse(float x, float y, float width, float height) {
     glVertex3f(x, y + height, 0.0);
     glEnd();
 
-    // Draw the roof
-    glColor3f(0.8, 0.2, 0.2); // Roof color
+
+    glColor3f(0.8, 0.2, 0.2);
     glBegin(GL_TRIANGLES);
     glVertex3f(x, y + height, 0.0);
     glVertex3f(x + width / 2, y + height + height * 0.5, 0.0);
     glVertex3f(x + width, y + height, 0.0);
     glEnd();
 
-    // Draw the door
+
     glColor3f(0.0, 0.4, 0.8); // Door color
     glBegin(GL_POLYGON);
     glVertex3f(x + width * 0.4, y, 0.0);
@@ -185,7 +187,7 @@ void drawHouse(float x, float y, float width, float height) {
     glEnd();
 }
 
-// Function to draw the background (sky)
+
 void drawSky() {
     //glColor3f(0.5f, 0.2f, 0.8f); // Purple sky
     glColor3f(1, 1, 1);
@@ -210,129 +212,154 @@ void drawVolcano() {
     glEnd();
 }
 
-// Function to draw the brown mountain
+
 void drawMountain() {
     glColor3f(0.6f, 0.3f, 0.1f);  // Brown mountain
     glBegin(GL_TRIANGLES);
-    glVertex3f(0.5f, -0.2f, 0.0f);   // Peak of the mountain
-    glVertex3f(0.2f, -0.8f, 0.0f);   // Bottom-left
-    glVertex3f(0.8f, -0.8f, 0.0f);   // Bottom-right
+    glVertex3f(0.5f, -0.2f, 0.0f);
+    glVertex3f(0.2f, -0.8f, 0.0f);
+    glVertex3f(0.8f, -0.8f, 0.0f);
     glEnd();
 }
 
-// Function to draw the eruption
+
 void drawEruption() {
-    // Red outer explosion
-    glColor3f(1.0f, 0.0f, 0.0f);  // Red explosion
+    float peakX = 0.2f;   // X-coordinate of the volcano peak
+    float peakY = 0.0f;  // Y-coordinate of the volcano peak
+
+    // Outer Red Explosion (bigger and more spread)
+    glColor3f(1.0f, 0.0f, 0.0f);
     glBegin(GL_TRIANGLES);
-    glVertex3f(0.0f + 0.2, 0.0f, 0.0f);    // Peak of volcano
-    glVertex3f(-0.1f + 0.2, 0.3f, 0.0f);   // Left explosion
-    glVertex3f(0.1f + 0.2, 0.3f, 0.0f);    // Right explosion
+    glVertex3f(peakX, peakY, 0.0f);           // Peak of volcano
+    glVertex3f(peakX - 0.15f, peakY + 0.6f, 0.0f); // Left outer explosion
+    glVertex3f(peakX + 0.15f, peakY + 0.6f, 0.0f); // Right outer explosion
     glEnd();
 
-    // Yellow inner explosion
-    glColor3f(1.0f, 1.0f, 0.0f);  // Yellow explosion
     glBegin(GL_TRIANGLES);
-    glVertex3f(0.0f + 0.2, 0.0f, 0.0f);   // Peak of volcano
-    glVertex3f(-0.05f + 0.2, 0.25f, 0.0f); // Left inner explosion
-    glVertex3f(0.05f + 0.2, 0.25f, 0.0f);  // Right inner explosion
+    glVertex3f(peakX, peakY, 0.0f);           // Peak of volcano
+    glVertex3f(peakX - 0.25f, peakY + 0.45f, 0.0f); // Left secondary explosion
+    glVertex3f(peakX + 0.25f, peakY + 0.45f, 0.0f); // Right secondary explosion
     glEnd();
+
+    // Middle Orange Explosion
+    glColor3f(1.0f, 0.5f, 0.0f);  // Lava-like color (orange)
+    glBegin(GL_TRIANGLES);
+    glVertex3f(peakX, peakY, 0.0f);           // Peak of volcano
+    glVertex3f(peakX - 0.1f, peakY + 0.5f, 0.0f);  // Left middle explosion
+    glVertex3f(peakX + 0.1f, peakY + 0.5f, 0.0f);  // Right middle explosion
+    glEnd();
+
+    glBegin(GL_TRIANGLES);
+    glVertex3f(peakX, peakY, 0.0f);           // Peak of volcano
+    glVertex3f(peakX - 0.2f, peakY + 0.35f, 0.0f); // Left middle explosion
+    glVertex3f(peakX + 0.2f, peakY + 0.35f, 0.0f); // Right middle explosion
+    glEnd();
+
+    // Inner Yellow Explosion (smaller and closer to the peak)
+    glColor3f(1.0f, 1.0f, 0.0f);  // Yellow (hot lava)
+    glBegin(GL_TRIANGLES);
+    glVertex3f(peakX, peakY, 0.0f);           // Peak of volcano
+    glVertex3f(peakX - 0.05f, peakY + 0.35f, 0.0f); // Left inner explosion
+    glVertex3f(peakX + 0.05f, peakY + 0.35f, 0.0f); // Right inner explosion
+    glEnd();
+
+    // Add smaller particles around for more realism
+    glColor3f(1.0f, 0.5f, 0.0f);  // Smaller lava particles
+    glBegin(GL_POINTS);
+    glVertex3f(peakX + 0.02f, peakY + 0.4f, 0.0f);  // Small particle 1
+    glVertex3f(peakX - 0.03f, peakY + 0.43f, 0.0f); // Small particle 2
+    glVertex3f(peakX + 0.1f, peakY + 0.55f, 0.0f);  // Small particle 3
+    glVertex3f(peakX - 0.08f, peakY + 0.5f, 0.0f);  // Small particle 4
+    glEnd();
+
 }
 
-// Function to draw the lake
+
+
 void drawLake() {
     //glColor3f(0.0f, 0.7f, 1.0f); // Light blue for lake
     glBegin(GL_POLYGON);
     //glColor3f(0.0f, 0.7f, 1.0f); // Light blue for lake
     //glColor3f(82.0f / 255.0f, 133.0f / 255.0f, 145.0f / 255.0f);
     glColor3f(0, 0, 0);
-    glVertex3f(-1.0f, -0.6f, 0.0f);  // Bottom-left
-    glVertex3f(1.0f, -0.6f, 0.0f);   // Bottom-right
-    glVertex3f(1.0f, -1.0f, 0.0f);   // Top-right
-    glVertex3f(-1.0f, -1.0f, 0.0f);  // Top-left
+    glVertex3f(-1.0f, -0.6f, 0.0f);
+    glVertex3f(1.0f, -0.6f, 0.0f);
+    glVertex3f(1.0f, -1.0f, 0.0f);
+    glVertex3f(-1.0f, -1.0f, 0.0f);
     glEnd();
 }
 
 void drawWindmill(float x, float y, float scale) {
-    // Draw the base of the windmill
-    glColor3f(0.9, 0.9, 0.9); // Light gray color for the windmill base
+    glColor3f(0.9, 0.9, 0.9);
+
     glBegin(GL_POLYGON);
-    glVertex3f(x, y, 0.0);
-    glVertex3f(x + scale * 0.1, y, 0.0);
-    glVertex3f(x + scale * 0.1, y + scale * 0.3, 0.0);
-    glVertex3f(x, y + scale * 0.3, 0.0);
+    glVertex3f(x + .48 * scale, y + .48 * scale, 0);
+    glVertex3f(x + .53 * scale, y + .48 * scale, 0);
+    glVertex3f(x + .53 * scale, y + .53 * scale, 0);
+    glVertex3f(x + .48 * scale, y + .53 * scale, 0);
     glEnd();
 
-    // Draw the windmill blades
-    glColor3f(0.8, 0.4, 0.2); // Brown color for the blades
-
-    // Blade 1: Right
     glBegin(GL_TRIANGLES);
-    glVertex3f(x + scale * 0.05, y + scale * 0.3, 0.0); // Center of the windmill
-    glVertex3f(x + scale * 0.15, y + scale * 0.3, 0.0); // Right blade
-    glVertex3f(x + scale * 0.05, y + scale * 0.35, 0.0); // Extending outwards
+    glVertex3f(x + scale * .70, y + scale * .80, 0);
+    glVertex3f(x + scale * .48, y + scale * .53, 0);
+    glVertex3f(x + scale * .53, y + scale * .53, 0);
     glEnd();
 
-    // Blade 2: Top
     glBegin(GL_TRIANGLES);
-    glVertex3f(x + scale * 0.05, y + scale * 0.3, 0.0); // Center of the windmill
-    glVertex3f(x + scale * 0.05, y + scale * 0.45, 0.0); // Top blade
-    glVertex3f(x + scale * 0.00, y + scale * 0.35, 0.0); // Extending outwards
+    glVertex3f(x + scale * .80, y + scale * .30, 0);
+    glVertex3f(x + scale * .53, y + scale * .53, 0);
+    glVertex3f(x + scale * .53, y + scale * .48, 0);
+
+    glBegin(GL_TRIANGLES);
+    glVertex3f(x + scale * .20, y + scale * .40, 0);
+    glVertex3f(x + scale * .48, y + scale * .53, 0);
+    glVertex3f(x + scale * .48, y + scale * .48, 0);
     glEnd();
 
-    // Blade 3: Left
     glBegin(GL_TRIANGLES);
-    glVertex3f(x + scale * 0.05, y + scale * 0.3, 0.0); // Center of the windmill
-    glVertex3f(x - scale * 0.05, y + scale * 0.3, 0.0); // Left blade
-    glVertex3f(x + scale * 0.05, y + scale * 0.35, 0.0); // Extending outwards
-    glEnd();
-
-    // Blade 4: Bottom
-    glBegin(GL_TRIANGLES);
-    glVertex3f(x + scale * 0.05, y + scale * 0.3, 0.0); // Center of the windmill
-    glVertex3f(x + scale * 0.05, y + scale * 0.15, 0.0); // Bottom blade
-    glVertex3f(x + scale * 0.00, y + scale * 0.25, 0.0); // Extending outwards
+    glVertex3f(x + scale * .50, y + scale * 0.50, 0);
+    glVertex3f(x + scale * .48, y + scale * 0.0, 0);
+    glVertex3f(x + scale * .53, y + scale * 0.0, 0);
     glEnd();
 }
 
 void drawBoat(float x, float y, float scale) {
     // Draw the boat base
-    glColor3f(0.5, 0.3, 0.2); // Brown color for the boat
+    glColor3f(0.5, 0.3, 0.2);
     glBegin(GL_POLYGON);
-    glVertex3f(x, y, 0.0);                         // Bottom left
-    glVertex3f(x + scale * 0.3, y, 0.0);           // Bottom right
-    glVertex3f(x + scale * 0.25, y - scale * 0.1, 0.0);  // Lower right
-    glVertex3f(x + scale * 0.05, y - scale * 0.1, 0.0);  // Lower left
+    glVertex3f(x, y, 0.0);
+    glVertex3f(x + scale * 0.3, y, 0.0);
+    glVertex3f(x + scale * 0.25, y - scale * 0.1, 0.0);
+    glVertex3f(x + scale * 0.05, y - scale * 0.1, 0.0);
     glEnd();
 
     // Draw the sail
-    glColor3f(1.0, 1.0, 1.0); // White color for the sail
+    glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_TRIANGLES);
-    glVertex3f(x + scale * 0.15, y + scale * 0.1, 0.0);  // Top of the sail
-    glVertex3f(x + scale * 0.25, y, 0.0);           // Bottom right of the sail
-    glVertex3f(x + scale * 0.05, y, 0.0);           // Bottom left of the sail
+    glVertex3f(x + scale * 0.15, y + scale * 0.1, 0.0);
+    glVertex3f(x + scale * 0.25, y, 0.0);
+    glVertex3f(x + scale * 0.05, y, 0.0);
     glEnd();
 }
 
 void drawRiver(float x, float y, float width, float height) {
-    // Draw the river as a rectangle (polygon)
+
     glColor3f(0.0, 0.5, 1.0); // Blue color for the river
     glBegin(GL_POLYGON);
     glColor3f(26.0f / 255.0f, 40.0f / 255.0f, 147.0f / 255.0f);
-    glVertex3f(x, y, 0.0);                  // Bottom-left
+    glVertex3f(x, y, 0.0);
     glColor3f(0.0, 0.5, 1.0);
-    glVertex3f(x + width, y, 0.0);          // Bottom-right
-    glVertex3f(x + width, y + height, 0.0); // Top-right
-    glVertex3f(x, y + height, 0.0);         // Top-left
+    glVertex3f(x + width, y, 0.0);
+    glVertex3f(x + width, y + height, 0.0);
+    glVertex3f(x, y + height, 0.0);
     glEnd();
 }
 
 void drawPlane(float x, float y, float width, float height) {
     glColor3f(1.0, 0.5, 0.0);
 
-    // Draw plan1 with specified vertices counterclockwise.
     glBegin(GL_POLYGON);
-    glVertex3f(x, y, 0.0);	// x, y, z
+    glVertex3f(x, y, 0.0);
     glVertex3f(x + width, y, 0.0);
     glVertex3f(x + width, y + height, 0.0);
     glVertex3f(x + width / 3, y + height, 0.0);
@@ -341,47 +368,43 @@ void drawPlane(float x, float y, float width, float height) {
     //// setting the drawing color
     glColor3f(1.0, 0.0, 0.0);
 
-    // Draw windows on plan1 with specified vertices counterclockwise.
     glBegin(GL_POLYGON);
-    glVertex3f(x + 0.028, y, 0.0);	// x, y, z
+    glVertex3f(x + 0.028, y, 0.0);
     glVertex3f(x + 0.037, y, 0.0);
     glVertex3f(x + 0.037, y + 0.011, 0.0);
     glVertex3f(x + 0.028, y + 0.011, 0.0);
     glEnd();
 
-    // Draw windows on plan1 with specified vertices counterclockwise.
     glBegin(GL_POLYGON);
-    glVertex3f(x + 0.05, y + 0.0033, 0.0);	// x, y, z
+    glVertex3f(x + 0.05, y + 0.0033, 0.0);
     glVertex3f(x + 0.063, y + 0.0033, 0.0);
     glVertex3f(x + 0.063, y + 0.011, 0.0);
     glVertex3f(x + 0.05, y + 0.011, 0.0);
     glEnd();
 
-    // Draw windows on plan1 with specified vertices counterclockwise.
     glBegin(GL_POLYGON);
-    glVertex3f((x + 0.02) + 0.05, y + 0.0033, 0.0);	// x, y, z
+    glVertex3f((x + 0.02) + 0.05, y + 0.0033, 0.0);
     glVertex3f((x + 0.02) + 0.063, y + 0.0033, 0.0);
     glVertex3f((x + 0.02) + 0.063, y + 0.011, 0.0);
     glVertex3f((x + 0.02) + 0.05, y + 0.011, 0.0);
     glEnd();
 
-    // Draw windows on plan1 with specified vertices counterclockwise.
+
     glBegin(GL_POLYGON);
-    glVertex3f(x + 0.08, (y + 0.025), 0.0);	// x, y, z
+    glVertex3f(x + 0.08, (y + 0.025), 0.0);
     glVertex3f(x + 0.1, (y + 0.025), 0.0);
     glVertex3f(x + 0.1, (y + 0.025) + 0.02, 0.0);
     glEnd();
 
 
-    // Draw plan2 with specified vertices counterclockwise.
+
     float x_plan2 = 0.25;
     float y_plan2 = -0.07;
 
     glColor3f(1.0, 1.0, 1.0);
 
-    // Draw window on plan2 with specified vertices counterclockwise.
     glBegin(GL_POLYGON);
-    glVertex3f(x + x_plan2, y + y_plan2, 0.0);	// x, y, z
+    glVertex3f(x + x_plan2, y + y_plan2, 0.0);
     glVertex3f(x + x_plan2 + width, y + y_plan2, 0.0);
     glVertex3f(x + x_plan2 + width, y + y_plan2 + height, 0.0);
     glVertex3f(x + x_plan2 + (width / 3), y + y_plan2 + height, 0.0);
@@ -390,17 +413,17 @@ void drawPlane(float x, float y, float width, float height) {
     //// setting the drawing color
     glColor3f(1.0, 0.0, 0.0);
 
-    // Draw windows on plan2 with specified vertices counterclockwise.
+
     glBegin(GL_POLYGON);
-    glVertex3f(x + x_plan2 + 0.028, y + y_plan2, 0.0);	// x, y, z
+    glVertex3f(x + x_plan2 + 0.028, y + y_plan2, 0.0);
     glVertex3f(x + x_plan2 + 0.037, y + y_plan2, 0.0);
     glVertex3f(x + x_plan2 + 0.037, y + y_plan2 + 0.011, 0.0);
     glVertex3f(x + x_plan2 + 0.028, y + y_plan2 + 0.011, 0.0);
     glEnd();
 
-    // Draw windows on plan2 with specified vertices counterclockwise.
+
     glBegin(GL_POLYGON);
-    glVertex3f(x + x_plan2 + 0.05, y + y_plan2 + 0.0033, 0.0);	// x, y, z
+    glVertex3f(x + x_plan2 + 0.05, y + y_plan2 + 0.0033, 0.0);
     glVertex3f(x + x_plan2 + 0.063, y + y_plan2 + 0.0033, 0.0);
     glVertex3f(x + x_plan2 + 0.063, y + y_plan2 + 0.011, 0.0);
     glVertex3f(x + x_plan2 + 0.05, y + y_plan2 + 0.011, 0.0);
@@ -408,16 +431,15 @@ void drawPlane(float x, float y, float width, float height) {
 
     // Draw windows on plan2 with specified vertices counterclockwise.
     glBegin(GL_POLYGON);
-    glVertex3f((x + x_plan2 + 0.02) + 0.05, y + y_plan2 + 0.0033, 0.0);	// x, y, z
+    glVertex3f((x + x_plan2 + 0.02) + 0.05, y + y_plan2 + 0.0033, 0.0);
     glVertex3f((x + x_plan2 + 0.02) + 0.063, y + y_plan2 + 0.0033, 0.0);
     glVertex3f((x + x_plan2 + 0.02) + 0.063, y + y_plan2 + 0.0033, 0.0);
     glVertex3f((x + x_plan2 + 0.02) + 0.063, y + y_plan2 + 0.011, 0.0);
     glVertex3f((x + x_plan2 + 0.02) + 0.05, y + y_plan2 + 0.011, 0.0);
     glEnd();
 
-    // Draw windows on plan2 with specified vertices counterclockwise.
     glBegin(GL_POLYGON);
-    glVertex3f(x + x_plan2 + 0.08, (y + y_plan2 + 0.025), 0.0);	// x, y, z
+    glVertex3f(x + x_plan2 + 0.08, (y + y_plan2 + 0.025), 0.0);
     glVertex3f(x + x_plan2 + 0.1, (y + y_plan2 + 0.025), 0.0);
     glVertex3f(x + x_plan2 + 0.1, (y + y_plan2 + 0.025) + 0.02, 0.0);
     glEnd();
@@ -430,7 +452,7 @@ void drawScene(void) {
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0); // Set orthographic projection
+    glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
 
     // Draw elements in the scene
     //drawSun(0.6f, 0.8f, 0.1f);
@@ -467,25 +489,25 @@ void drawScene(void) {
     drawHouse(-0.5, -0.5, 0.5, 0.5); // House centered in the left half of the screen
 
 
-    // Call the drawWindmill function, scaling the windmill to fit in [-1, 1]
-    drawWindmill(-0.85, -0.5, 1.0);  // Scaled to fit the orthographic projection
-    drawWindmill(0.55, -0.5, 0.5);   // A smaller windmill
-    drawWindmill(0.8, -0.5, 1.0);
+
+    drawWindmill(0.55, -0.5, 0.5);
+    drawWindmill(0.2, -0.4, 0.2);
+    drawWindmill(-1, -0.3, 0.3);
 
     // Draw the river, adjusting position and size to fit in [-1, 1]
-    drawRiver(-1.0, -1.0, 2.0, 0.5);  // A wide river covering most of the bottom part of the screen
+    drawRiver(-1.0, -1.0, 2.0, 0.5);
 
-    // Draw fish
+
     drawFish(-0.7f, -0.8f, 1.0f);
     drawFish(-0.1f, -0.90f, 0.8f);
     drawFish(0.5f, -0.7f, 0.9f);
     drawFish(0.8f, -0.90f, 0.8f);
 
-    // Call the drawBoat function, scaling the boat to fit in [-1, 1]
-    drawBoat(-0.6, -0.55, 1.0);  // Boat centered at (-0.5, -0.5) with a large scale
+
+    drawBoat(-0.6, -0.55, 1.0);
     drawBoat(0.0, -0.7, 0.5);   // A smaller boat
 
-    // Call the drawPlane function 
+
     drawPlane(-0.33, 0.7, 0.1, 0.025);
 
     glFlush();
@@ -498,9 +520,9 @@ int main(int argc, char** argv) {
     glutInitWindowPosition(240, 40);
     glutCreateWindow("Fish-Grass-Sun-Boat-Houses-Windmill");
 
-    glutDisplayFunc(drawScene); // Set the display function
-    drawScene(); // Initial call to draw the scene
-    glutMainLoop(); // Enter the GLUT event processing loop
+    glutDisplayFunc(drawScene);
+    drawScene();
+    glutMainLoop();
 
     return 0;
 }
