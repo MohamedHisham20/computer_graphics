@@ -1,81 +1,189 @@
-// Tutorial activity: a simple animation for a walking man
-/////////////////////////////////
-
 #include <iostream>
+#include <GL/glew.h>
+#include <GL/freeglut.h>
 
-#include <glew.h>
-#include <freeglut.h>
-
-// angles to rotate the scene
+// Angles to rotate the scene
 static float Xangle = 0.0, Yangle = 0.0, Zangle = 0.0;
-
-static int animate = 0;
-static int forward = 0;
-
-static float legAngle = 0.0;
-
 
 // Drawing routine.
 void drawScene(void)
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glColor3f(0.0, 0.0, 0.0);
     glLoadIdentity();
 
     glTranslatef(0.0, 0.0, -20.0);
     glRotatef(Zangle, 0.0, 0.0, 1.0);
     glRotatef(Yangle, 0.0, 1.0, 0.0);
-    
-    
     glRotatef(Xangle, 1.0, 0.0, 0.0);
-    
-    // torso
+
+    // Floor
     glPushMatrix();
-    glScalef(1.0, 2.0, 0.5);
-    glutWireCube(5.0);
+    glColor3f(0.8, 0.52, 0.25);
+    glBegin(GL_POLYGON);
+    glVertex3f(-15.0, -10.0, -10.0);
+    glVertex3f(15.0, -10.0, -10.0);
+    glVertex3f(15.0, -10.0, 5.0);
+    glVertex3f(-15.0, -10.0, 5.0);
+    glEnd();
     glPopMatrix();
-    
-    
-    // head
+
+    // Carpet
     glPushMatrix();
-    glTranslatef(0.0, 6.5, 0.0);
-    glutWireSphere(1.5, 10, 10);
+    glBegin(GL_POLYGON);
+    glColor3f(0.1, 0.1, 0.1);
+    glVertex3f(-7.5, -10.0, -5.0);
+    glVertex3f(7.5, -10.0, -5.0);
+    glVertex3f(7.5, -10.0, 2.5);
+    glVertex3f(-7.5, -10.0, 2.5);
+    glEnd();
     glPopMatrix();
-    
-    // left leg
+
+    // Left wall
     glPushMatrix();
-    glTranslatef(0.0, -5.0, 0.0);
-    glRotatef(legAngle, 1.0, 0.0, 0.0);
-    glTranslatef(0.0, 5.0, 0.0);
-    
-    glTranslatef(-1.0, -10.0, 0.0);
-    glScalef(0.2, 2.0, 0.25);
-    glutWireCube(5.0);
+    glColor3f(0.9, 0.85, 0.75);
+    glBegin(GL_POLYGON);
+    glVertex3f(-15.0, -10.0, -10.0);
+    glVertex3f(-15.0, 10.0, -10.0);
+    glVertex3f(-15.0, 10.0, 5.0);
+    glVertex3f(-15.0, -10.0, 5.0);
+    glEnd();
     glPopMatrix();
-   
-    // right leg
+
+    // Right wall
     glPushMatrix();
-    glTranslatef(0.0, -5.0, 0.0);
-    glRotatef(-legAngle, 1.0, 0.0, 0.0);
-    glTranslatef(0.0, 5.0, 0.0);
-    
-    glTranslatef(1.0, -10.0, 0.0);
-    glScalef(0.2, 2.0, 0.25);
-    glutWireCube(5.0);
+    glColor3f(0.85, 0.8, 0.7);
+    glBegin(GL_POLYGON);
+    glVertex3f(15.0, -10.0, -10.0);
+    glVertex3f(15.0, 10.0, -10.0);
+    glVertex3f(15.0, 10.0, 5.0);
+    glVertex3f(15.0, -10.0, 5.0);
+    glEnd();
     glPopMatrix();
-    
+
+    // Ceiling
+    glPushMatrix();
+    glColor3f(1.0, 0.95, 0.9);
+    glBegin(GL_POLYGON);
+    glVertex3f(-15.0, 10.0, -10.0);
+    glVertex3f(15.0, 10.0, -10.0);
+    glVertex3f(15.0, 10.0, 5.0);
+    glVertex3f(-15.0, 10.0, 5.0);
+    glEnd();
+    glPopMatrix();
+
+     //torso
+       glPushMatrix();
+       glColor3f(0.0, 0.5, 1.0);
+       glTranslatef(-1,-1,0);
+       glScalef(0.5, 1.0, 0.5);
+       glutSolidCube(5.0);
+       glPopMatrix();
+
+       // head
+       glPushMatrix();
+       glColor3f(0.9, 0.75, 0.6);
+       glTranslatef(-1, 2.65, 0.0);
+       glutSolidSphere(1.2, 15, 10);
+       glPopMatrix();
+
+       // left leg
+       glPushMatrix();
+       glColor3f(0.1, 0.1, 0.5);
+       glTranslatef(0.0, -2.5, 0.0);
+        //glRotatef(legAngle, 1.0, 0.0, 0.0);
+       glTranslatef(0.0, 2.0, 0.0);
+
+       glTranslatef(-1.75, -5.5, 0.0);
+       glScalef(0.15, 1, 0.25);
+       glutSolidCube(5.0);
+        glPopMatrix();
+
+
+        // right leg
+        glPushMatrix();
+        glColor3f(0.1, 0.1, 0.5);
+        glTranslatef(0.0, -2.5, 0.0);
+        //glRotatef(legAngle, 1.0, 0.0, 0.0);
+        glTranslatef(0.0, 2.0, 0.0);
+
+        glTranslatef(-0.25, -5.5, 0.0);
+        glScalef(0.15, 1, 0.25);
+        glutSolidCube(5.0);
+        glPopMatrix();
+        
+        // right hand
+        glPushMatrix();
+        glColor3f(0.9, 0.75, 0.6);
+        glTranslatef(0.0, -2.5, 0.0);
+        //glRotatef(legAngle, 1.0, 0.0, 0.0);
+        glTranslatef(0.0, 2.0, 0.0);
+
+        glTranslatef(0.65, -.5, 0.0);
+        glScalef(0.15, 1, 0.25);
+        glutSolidCube(5.0);
+        glPopMatrix();
+
+        // lenft hand
+        glPushMatrix();
+        glColor3f(0.9, 0.75, 0.6);
+        glTranslatef(0.0, -2.5, 0.0);
+        //glRotatef(legAngle, 1.0, 0.0, 0.0);
+        glTranslatef(0.0, 2.0, 0.0);
+
+        glTranslatef(-2.7, -.5, 0.0);
+        glScalef(0.15, 1, 0.25);
+        glutSolidCube(5.0);
+        glPopMatrix();
+
+
+
+    // Back wall
+    glPushMatrix();
+    glColor3f(0.8, 0.75, 0.65);
+    glBegin(GL_POLYGON);
+    glVertex3f(-15.0, -10.0, -10.0);
+    glVertex3f(15.0, -10.0, -10.0);
+    glVertex3f(15.0, 10.0, -10.0);
+    glVertex3f(-15.0, 10.0, -10.0);
+    glEnd();
+    glPopMatrix();
+
+    // Window frame
+    glPushMatrix();
+    glColor3f(0.8, 0.52, 0.25);
+    glBegin(GL_POLYGON);
+    glVertex3f(-3.5, 0.5, -9.9);
+    glVertex3f(3.5, 0.5, -9.9);
+    glVertex3f(3.5, 7.0, -9.9);
+    glVertex3f(-3.5, 7.0, -9.9);
+    glEnd();
+    glPopMatrix();
+
+    // Window
+    glPushMatrix();
+    glBegin(GL_POLYGON);
+    glColor3f(0.2, 0.5, 0.8);
+    glVertex3f(-3.0, 1.0, -9.8);
+    glColor3f(0.0, 1.0, 0.0);
+    glVertex3f(3.0, 1.0, -9.8);
+    glColor3f(0.2, 0.5, 0.8);
+    glVertex3f(3.0, 6.5, -9.8);
+    glColor3f(0.2, 0.5, 0.8);
+    glVertex3f(-3.0, 6.5, -9.8);
+    glEnd();
+    glPopMatrix();
+
     glutSwapBuffers();
-    
 }
 
-
-// Initialization routine.
 void setup(void)
 {
     glClearColor(1.0, 1.0, 1.0, 0.0);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
 }
 
-// OpenGL window reshape routine.
 void resize(int w, int h)
 {
     glViewport(0, 0, w, h);
@@ -85,27 +193,6 @@ void resize(int w, int h)
     glMatrixMode(GL_MODELVIEW);
 }
 
-
-void animation(int value)
-{
-    if (forward)
-    {
-        legAngle -= 5.0;
-    }
-    else
-    {
-        legAngle += 5.0;
-    }
-    
-    if (legAngle >= 30.0) forward = 1;
-    else if (legAngle <= -30.0) forward = 0;
-    
-    glutPostRedisplay();
-    
-    if (animate) glutTimerFunc(100, animation, 1);
-}
-
-// Keyboard input processing routine.
 void keyInput(unsigned char key, int x, int y)
 {
     switch (key)
@@ -113,78 +200,55 @@ void keyInput(unsigned char key, int x, int y)
     case 27:
         exit(0);
         break;
-         
-        case ' ':
-            if (animate)
-            {
-                animate = 0;
-            }
-            else
-            {
-                animate = 1;
-                animation(1);
-            }
-            
-            break;
-            
-        
-        case 'x':
-            Xangle += 5.0;
-            if (Xangle > 360.0) Xangle -= 360.0;
-            glutPostRedisplay();
-            break;
-        case 'X':
-            Xangle -= 5.0;
-            if (Xangle < 0.0) Xangle += 360.0;
-            glutPostRedisplay();
-            break;
-        case 'y':
-            Yangle += 5.0;
-            if (Yangle > 360.0) Yangle -= 360.0;
-            glutPostRedisplay();
-            break;
-        case 'Y':
-            Yangle -= 5.0;
-            if (Yangle < 0.0) Yangle += 360.0;
-            glutPostRedisplay();
-            break;
-        case 'z':
-            Zangle += 5.0;
-            if (Zangle > 360.0) Zangle -= 360.0;
-            glutPostRedisplay();
-            break;
-        case 'Z':
-            Zangle -= 5.0;
-            if (Zangle < 0.0) Zangle += 360.0;
-            glutPostRedisplay();
-            break;
-            
+    case 'x':
+        Xangle += 5.0;
+        if (Xangle > 360.0) Xangle -= 360.0;
+        glutPostRedisplay();
+        break;
+    case 'X':
+        Xangle -= 5.0;
+        if (Xangle < 0.0) Xangle += 360.0;
+        glutPostRedisplay();
+        break;
+    case 'y':
+        Yangle += 5.0;
+        if (Yangle > 360.0) Yangle -= 360.0;
+        glutPostRedisplay();
+        break;
+    case 'Y':
+        Yangle -= 5.0;
+        if (Yangle < 0.0) Yangle += 360.0;
+        glutPostRedisplay();
+        break;
+    case 'z':
+        Zangle += 5.0;
+        if (Zangle > 360.0) Zangle -= 360.0;
+        glutPostRedisplay();
+        break;
+    case 'Z':
+        Zangle -= 5.0;
+        if (Zangle < 0.0) Zangle += 360.0;
+        glutPostRedisplay();
+        break;
     default:
         break;
     }
 }
 
-// Main routine.
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
-
     glutInitContextVersion(4, 3);
     glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
-
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowSize(500, 500);
     glutInitWindowPosition(100, 100);
-    glutCreateWindow("box.cpp");
+    glutCreateWindow("walls_and_floor.cpp");
     glutDisplayFunc(drawScene);
     glutReshapeFunc(resize);
     glutKeyboardFunc(keyInput);
-    
-    glewExperimental = GL_TRUE;
     glewInit();
-
     setup();
-    
     glutMainLoop();
+    return 0;
 }
-
