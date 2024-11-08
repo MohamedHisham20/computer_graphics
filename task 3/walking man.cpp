@@ -41,12 +41,57 @@ void drawScene(void)
     glPushMatrix();
     glColor3f(0.8, 0.52, 0.25);
     glBegin(GL_POLYGON);
-    glVertex3f(-15.0, -10.0, -10.0);
-    glVertex3f(15.0, -10.0, -10.0);
-    glVertex3f(15.0, -10.0, 5.0);
-    glVertex3f(-15.0, -10.0, 5.0);
+    glVertex3f(-20.0, -10.0, -10.0);
+    glVertex3f(20.0, -10.0, -10.0);
+    glVertex3f(20.0, -10.0, 5.0);
+    glVertex3f(-20.0, -10.0, 5.0);
     glEnd();
     glPopMatrix();
+
+    // Right wall
+    glPushMatrix();
+    glColor3f(0.85, 0.8, 0.7);
+    glBegin(GL_POLYGON);
+    glVertex3f(20.0, -10.0, -10.0);
+    glVertex3f(20.0, 15.0, -10.0);
+    glVertex3f(20.0, 15.0, 5.0);
+    glVertex3f(20.0, -10.0, 5.0);
+    glEnd();
+    glPopMatrix();
+
+    // Ceiling
+    glPushMatrix();
+    glColor3f(1.0, 0.95, 0.9);
+    glBegin(GL_POLYGON);
+    glVertex3f(-20.0, 15.0, -10.0);
+    glVertex3f(20.0, 15.0, -10.0);
+    glVertex3f(20.0, 15.0, 5.0);
+    glVertex3f(-20.0, 15.0, 5.0);
+    glEnd();
+    glPopMatrix();
+
+    // Left wall
+    glPushMatrix();
+    glColor3f(0.9, 0.85, 0.75);
+    glBegin(GL_POLYGON);
+    glVertex3f(-20.0, -10.0, -10.0);
+    glVertex3f(-20.0, 15.0, -10.0);
+    glVertex3f(-20.0, 15.0, 5.0);
+    glVertex3f(-20.0, -10.0, 5.0);
+    glEnd();
+    glPopMatrix();
+
+    // Back wall
+    glPushMatrix();
+    glColor3f(0.8, 0.75, 0.65);
+    glBegin(GL_POLYGON);
+    glVertex3f(-20.0, -10.0, -10.0);
+    glVertex3f(20.0, -10.0, -10.0);
+    glVertex3f(20.0, 15.0, -10.0);
+    glVertex3f(-20.0, 15.0, -10.0);
+    glEnd();
+    glPopMatrix();
+
 
     // Carpet
     glPushMatrix();
@@ -60,9 +105,10 @@ void drawScene(void)
     glPopMatrix();
 
 
+    // Horizontal floor lines
     glPushMatrix();
     glColor3f(0.847, 0.701, 0.549);
-    for (float x = -15.0; x <= 15.0; x += 1.5)
+    for (float x = -20.0; x <= 20.0; x += 1.5)
     {
         glBegin(GL_LINES);
         glVertex3f(x, -10.0, -10.0);
@@ -71,70 +117,39 @@ void drawScene(void)
     }
     glPopMatrix();
 
-
+    // Vertical floor lines
     glPushMatrix();
     glColor3f(0.847, 0.701, 0.549);
-    for (float z = -11; z <= 5.2; z += 1.5)
+    for (float z = -20.0; z <= 5.0; z += 1.5)
     {
         glBegin(GL_LINES);
-        glVertex3f(-15.0, -10.0, z);
-        glVertex3f(15.0, -10.0, z);
+        glVertex3f(-20.0, -10.0, z);
+        glVertex3f(20.0, -10.0, z);
         glEnd();
     }
     glPopMatrix();
 
 
-    // Right wall
+
+
+    // Door frame
     glPushMatrix();
-    glColor3f(0.85, 0.8, 0.7);
+    glColor3f(0.6, 0.4, 0.3);
     glBegin(GL_POLYGON);
-    glVertex3f(15.0, -10.0, -10.0);
-    glVertex3f(15.0, 10.0, -10.0);
-    glVertex3f(15.0, 10.0, 5.0);
-    glVertex3f(15.0, -10.0, 5.0);
+    glVertex3f(-20.0, -10.0, -5.0);
+    glVertex3f(-20.0, 4.0, -5.0);
+    glVertex3f(-20.0, 4.0, -1.0);
+    glVertex3f(-20.0, -10.0, -1.0);
     glEnd();
     glPopMatrix();
-
-    // Ceiling
-    glPushMatrix();
-    glColor3f(1.0, 0.95, 0.9);
-    glBegin(GL_POLYGON);
-    glVertex3f(-15.0, 10.0, -10.0);
-    glVertex3f(15.0, 10.0, -10.0);
-    glVertex3f(15.0, 10.0, 5.0);
-    glVertex3f(-15.0, 10.0, 5.0);
-    glEnd();
-    glPopMatrix();
-
-    // Left wall
-    glPushMatrix();
-    glColor3f(0.9, 0.85, 0.75);
-    glBegin(GL_POLYGON);
-    glVertex3f(-15.0, -10.0, -10.0);
-    glVertex3f(-15.0, 10.0, -10.0);
-    glVertex3f(-15.0, 10.0, 5.0);
-    glVertex3f(-15.0, -10.0, 5.0);
-    glEnd();
-    glPopMatrix();
-
-    // Door frame on the left wall (moved further left)
-    glPushMatrix();
-    glColor3f(0.6, 0.4, 0.3); // Door frame color
-    glBegin(GL_POLYGON);
-    glVertex3f(-15.0, -10.0, -4.0);
-    glVertex3f(-15.0, 4.0, -4.0);
-    glVertex3f(-15.0, 4.0, 1.0);
-    glVertex3f(-15.0, -10.0, 1.0);
-    glEnd();
-    glPopMatrix();
-
 
     // Door knob
     glPushMatrix();
     glColor3f(1.0, 1.0, 0.0);
-    glTranslatef(-14.7, -5.0, -2);
+    glTranslatef(-19.7, -3.0, -3.5);
     glutSolidSphere(0.3, 10, 10);
     glPopMatrix();
+
 
 
     //torso
@@ -221,49 +236,40 @@ void drawScene(void)
                 isGoingUp = true;
 
                 // update the ballX and ballY values according to current ball location
-		        ballX = 2.0;
-		        ballY = 6.0;
+                ballX = 2.0;
+                ballY = 6.0;
             }
         }
-		
+
     }
     else {
         // Ball is released
-        
-        // move the ball 
+
+        // move the ball
         glTranslatef(ballX, ballY, 1.0);
 
         // update ballY and ballX to simulate a throw
-		ballY += ballVelocityY;
-		ballVelocityY -= 0.001; // Gravity
-		ballX += 0.06; // Move ball forward
+        ballY += ballVelocityY;
+        ballVelocityY -= 0.001; // Gravity
+        ballX += 0.06; // Move ball forward
 
-		// Check if the ball hit the floor
-		if (ballY <= -10.0) {
-			isBallHeld = true; // Ball is back in the hand
-			ballY = -4.0; // Reset ballY
-			ballVelocityY = 0.1; // Reset velocity
-			ballX = -2.0; // Reset ballX
-            // move it 
+        // Check if the ball hit the floor
+        if (ballY <= -10.0) {
+            isBallHeld = true; // Ball is back in the hand
+            ballY = -4.0; // Reset ballY
+            ballVelocityY = 0.1; // Reset velocity
+            ballX = -2.0; // Reset ballX
+            // move it
             glTranslatef(ballX, ballY, 1.0);
-        
+
         }
     }
 
     // Draw the ball
-    glutSolidSphere(1.0, 20, 20); 
+    glutSolidSphere(1.0, 20, 20);
     glPopMatrix();
 
-    // Back wall
-    glPushMatrix();
-    glColor3f(0.8, 0.75, 0.65);
-    glBegin(GL_POLYGON);
-    glVertex3f(-15.0, -10.0, -10.0);
-    glVertex3f(15.0, -10.0, -10.0);
-    glVertex3f(15.0, 10.0, -10.0);
-    glVertex3f(-15.0, 10.0, -10.0);
-    glEnd();
-    glPopMatrix();
+
 
     // Window frame
     glPushMatrix();
@@ -319,79 +325,79 @@ void keyInput(unsigned char key, int x, int y)
 {
     switch (key)
     {
-    case 27:
-        exit(0);
-        break;
-    case 'x':
-        Xangle += 5.0;
-        if (Xangle > 360.0) Xangle -= 360.0;
-        glutPostRedisplay();
-        break;
-    case 'X':
-        Xangle -= 5.0;
-        if (Xangle < 0.0) Xangle += 360.0;
-        glutPostRedisplay();
-        break;
-    case 'y':
-        Yangle += 5.0;
-        if (Yangle > 360.0) Yangle -= 360.0;
-        glutPostRedisplay();
-        break;
-    case 'Y':
-        Yangle -= 5.0;
-        if (Yangle < 0.0) Yangle += 360.0;
-        glutPostRedisplay();
-        break;
-    case 'z':
-        Zangle += 5.0;
-        if (Zangle > 360.0) Zangle -= 360.0;
-        glutPostRedisplay();
-        break;
-    case 'Z':
-        Zangle -= 5.0;
-        if (Zangle < 0.0) Zangle += 360.0;
-        glutPostRedisplay();
-        break;
+        case 27:
+            exit(0);
+            break;
+        case 'x':
+            Xangle += 5.0;
+            if (Xangle > 360.0) Xangle -= 360.0;
+            glutPostRedisplay();
+            break;
+        case 'X':
+            Xangle -= 5.0;
+            if (Xangle < 0.0) Xangle += 360.0;
+            glutPostRedisplay();
+            break;
+        case 'y':
+            Yangle += 5.0;
+            if (Yangle > 360.0) Yangle -= 360.0;
+            glutPostRedisplay();
+            break;
+        case 'Y':
+            Yangle -= 5.0;
+            if (Yangle < 0.0) Yangle += 360.0;
+            glutPostRedisplay();
+            break;
+        case 'z':
+            Zangle += 5.0;
+            if (Zangle > 360.0) Zangle -= 360.0;
+            glutPostRedisplay();
+            break;
+        case 'Z':
+            Zangle -= 5.0;
+            if (Zangle < 0.0) Zangle += 360.0;
+            glutPostRedisplay();
+            break;
 
-        // Add these to your `keyInput` function:
-    case 'a':  // Rotate LeftArm counterclockwise
-        LeftArm += 5.0;
-        if (LeftArm > 45.0) LeftArm = 45.0;  // Limit rotation
-        glutPostRedisplay();
-        break;
-    case 'A':  // Rotate LeftArm clockwise
-        LeftArm -= 5.0;
-        if (LeftArm < -45.0) LeftArm = -45.0;  // Limit rotation
-        glutPostRedisplay();
-        break;
-
-    case 'd': // Example to rotate TorsoX
-        TorsoX += 5.0;
-        if (TorsoX > 360.0) TorsoX -= 360.0;
-        glutPostRedisplay();
-        break;
-    case 'l': // Example to rotate LeftLeg
-        LeftLeg += 5.0;
-        if (LeftLeg > 360.0) LeftLeg -= 360.0;
-        glutPostRedisplay();
-        break;
-
-    case ' ':
-        if (armFront)
-        {
+            // Add these to your `keyInput` function:
+        case 'a':  // Rotate LeftArm counterclockwise
             LeftArm += 5.0;
-            if (LeftArm > 170) armFront = 0;
-
-        }
-        else
-        {
+            if (LeftArm > 45.0) LeftArm = 45.0;  // Limit rotation
+            glutPostRedisplay();
+            break;
+        case 'A':  // Rotate LeftArm clockwise
             LeftArm -= 5.0;
-            if (LeftArm < 0) armFront = 1;
-        }
-        glutPostRedisplay();
-        break;
-    default:
-        break;
+            if (LeftArm < -45.0) LeftArm = -45.0;  // Limit rotation
+            glutPostRedisplay();
+            break;
+
+        case 'd': // Example to rotate TorsoX
+            TorsoX += 5.0;
+            if (TorsoX > 360.0) TorsoX -= 360.0;
+            glutPostRedisplay();
+            break;
+        case 'l': // Example to rotate LeftLeg
+            LeftLeg += 5.0;
+            if (LeftLeg > 360.0) LeftLeg -= 360.0;
+            glutPostRedisplay();
+            break;
+
+        case ' ':
+            if (armFront)
+            {
+                LeftArm += 5.0;
+                if (LeftArm > 170) armFront = 0;
+
+            }
+            else
+            {
+                LeftArm -= 5.0;
+                if (LeftArm < 0) armFront = 1;
+            }
+            glutPostRedisplay();
+            break;
+        default:
+            break;
     }
 }
 
