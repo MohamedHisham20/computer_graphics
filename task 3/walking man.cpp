@@ -1,9 +1,10 @@
-
-
-
-#include <iostream>
 #include <GL/glew.h>
 #include <GL/freeglut.h>
+#include <GL/glut.h>
+#include <cmath>
+#include <iostream>
+#include <GL/glu.h>
+
 
 // Angles to rotate the scene
 static float Xangle = 0.0, Yangle = 0.0, Zangle = 0.0;
@@ -13,6 +14,12 @@ static float LeftArm = 0.0;  //rotate ACW abt z axis
 static float LeftLeg = 0.0;  //rotate leg CW abt z axis
 static float head = 0.0;   //move head back
 static int armFront = 1;
+
+bool isBallHeld = true;  // Initially, the ball is in the hand
+bool isGoingUp = true;  // Initially, the ball is going up with hand
+float ballX = -2.0, ballY = -4.0, ballZ = 0.0; // Ball's position
+float ballVelocityY = 0.01; // Initial upward velocity for throwing
+
 
 //void animate(void) {
 //    LeftArm += 10;
@@ -175,21 +182,77 @@ void drawScene(void)
     glutSolidCube(5.0);
     glPopMatrix();
 
-    // left hand
+    // Left hand (holding the ball)
     glPushMatrix();
     glColor3f(0.9, 0.75, 0.6);
 
+    // Position and rotate the arm
     glTranslatef(0.0, 1.3, -0.5);
     glRotatef(LeftArm, 0.0, 0.0, 1.0);
     glTranslatef(0.0, -1.3, 0.5);
 
+    // Position the hand
     glRotatef(70, 0.0, 1.0, 0.0);
     glTranslatef(-2.7, -1.0, 0.0);
     glScalef(0.15, 1, 0.25);
     glutSolidCube(5.0);
     glPopMatrix();
 
+    // Ball in the left hand (follows hand movements)
+    glPushMatrix();
+    glColor3f(1.0, 0.0, 0.0); // Ball color (red)
 
+    if (isBallHeld) {
+        // Ball is in hand, follow hand's transformations
+        glTranslatef(0.0, 1.3, -0.5);
+        glRotatef(LeftArm, 0.0, 0.0, 1.0);
+        glTranslatef(0.0, -1.3, 0.5);
+        glRotatef(70, 0.0, 1.0, 0.0);
+        glTranslatef(-2.0, -4.0, 1.0); // Position in front of hand
+
+
+        // Check if arm is at the top of its movement
+        if (LeftArm >= 200.0) {
+            if (isGoingUp) {
+                isGoingUp = false;
+            }
+            else { // Arm is at the top, release the ball
+                isBallHeld = false; // Release the ball
+                isGoingUp = true;
+
+                // update the ballX and ballY values according to current ball location
+		        ballX = 2.0;
+		        ballY = 6.0;
+            }
+        }
+		
+    }
+    else {
+        // Ball is released
+        
+        // move the ball 
+        glTranslatef(ballX, ballY, 1.0);
+
+        // update ballY and ballX to simulate a throw
+		ballY += ballVelocityY;
+		ballVelocityY -= 0.001; // Gravity
+		ballX += 0.06; // Move ball forward
+
+		// Check if the ball hit the floor
+		if (ballY <= -10.0) {
+			isBallHeld = true; // Ball is back in the hand
+			ballY = -4.0; // Reset ballY
+			ballVelocityY = 0.1; // Reset velocity
+			ballX = -2.0; // Reset ballX
+            // move it 
+            glTranslatef(ballX, ballY, 1.0);
+        
+        }
+    }
+
+    // Draw the ball
+    glutSolidSphere(1.0, 20, 20); 
+    glPopMatrix();
 
     // Back wall
     glPushMatrix();
@@ -246,6 +309,12 @@ void resize(int w, int h)
     glMatrixMode(GL_MODELVIEW);
 }
 
+void animate() {
+    LeftArm += 0.05 * armFront;  // Adjust the speed as needed
+    if (LeftArm >= 210.0 || LeftArm <= -10.0) armFront = -armFront;  // Swing back and forth
+    glutPostRedisplay();
+}
+
 void keyInput(unsigned char key, int x, int y)
 {
     switch (key)
@@ -283,6 +352,30 @@ void keyInput(unsigned char key, int x, int y)
         if (Zangle < 0.0) Zangle += 360.0;
         glutPostRedisplay();
         break;
+
+        // Add these to your `keyInput` function:
+    case 'a':  // Rotate LeftArm counterclockwise
+        LeftArm += 5.0;
+        if (LeftArm > 45.0) LeftArm = 45.0;  // Limit rotation
+        glutPostRedisplay();
+        break;
+    case 'A':  // Rotate LeftArm clockwise
+        LeftArm -= 5.0;
+        if (LeftArm < -45.0) LeftArm = -45.0;  // Limit rotation
+        glutPostRedisplay();
+        break;
+
+    case 'd': // Example to rotate TorsoX
+        TorsoX += 5.0;
+        if (TorsoX > 360.0) TorsoX -= 360.0;
+        glutPostRedisplay();
+        break;
+    case 'l': // Example to rotate LeftLeg
+        LeftLeg += 5.0;
+        if (LeftLeg > 360.0) LeftLeg -= 360.0;
+        glutPostRedisplay();
+        break;
+
     case ' ':
         if (armFront)
         {
@@ -310,12 +403,19 @@ int main(int argc, char** argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
     glutInitWindowSize(500, 500);
     glutInitWindowPosition(100, 100);
+
     glutCreateWindow("walls_and_floor.cpp");
+
     glutDisplayFunc(drawScene);
     glutReshapeFunc(resize);
     glutKeyboardFunc(keyInput);
+
+    glutIdleFunc(animate);  // Set idle callback for continuous animation
+
+
     glewInit();
     setup();
+
     glutMainLoop();
     return 0;
 }
