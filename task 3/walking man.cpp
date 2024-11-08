@@ -92,7 +92,6 @@ void drawScene(void)
     glEnd();
     glPopMatrix();
 
-
     // Carpet
     glPushMatrix();
     glBegin(GL_POLYGON);
@@ -132,6 +131,8 @@ void drawScene(void)
 
 
 
+
+
     // Door frame
     glPushMatrix();
     glColor3f(0.6, 0.4, 0.3);
@@ -149,7 +150,6 @@ void drawScene(void)
     glTranslatef(-19.7, -3.0, -3.5);
     glutSolidSphere(0.3, 10, 10);
     glPopMatrix();
-
 
 
     //torso
