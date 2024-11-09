@@ -17,8 +17,12 @@ static int armFront = 1;
 
 bool isBallHeld = true;  // Initially, the ball is in the hand
 bool isGoingUp = true;  // Initially, the ball is going up with hand
+
+bool armMovingUp = true;
+
 float ballX = -2.0, ballY = -4.0, ballZ = 0.0; // Ball's position
 float ballVelocityY = 0.01; // Initial upward velocity for throwing
+float ballVelocityX = 0.3;
 
 
 //void animate(void) {
@@ -222,17 +226,18 @@ void drawScene(void)
         glTranslatef(0.0, 1.3, -0.5);
         glRotatef(LeftArm, 0.0, 0.0, 1.0);
         glTranslatef(0.0, -1.3, 0.5);
-        glRotatef(70, 0.0, 1.0, 0.0);
+        glRotatef(50, 0.0, 1.0, 0.0);
         glTranslatef(-2.0, -4.0, 1.0); // Position in front of hand
 
 
         // Check if arm is at the top of its movement
-        if (LeftArm >= 200.0) {
-            if (isGoingUp) {
+        if (LeftArm >= 130.0 && LeftArm <= 131.0) {
+            if (isGoingUp && !armMovingUp) {
+                isBallHeld = false;
                 isGoingUp = false;
             }
             else { // Arm is at the top, release the ball
-                isBallHeld = false; // Release the ball
+                // Release the ball
                 isGoingUp = true;
 
                 // update the ballX and ballY values according to current ball location
@@ -243,33 +248,33 @@ void drawScene(void)
 
     }
     else {
-        // Ball is released
-
-        // move the ball
+        // Ball is released, apply movement
         glTranslatef(ballX, ballY, 1.0);
 
-        // update ballY and ballX to simulate a throw
+        // Update ball position
         ballY += ballVelocityY;
-        ballVelocityY -= 0.001; // Gravity
-        ballX += 0.06; // Move ball forward
+        ballVelocityY -= 0.003; // Gravity effect
+        ballX += ballVelocityX; // Move ball horizontally
+
+
+        if (ballX >= 20.0) {
+            ballVelocityX = -ballVelocityX; // Reflect the X velocity
+        }
 
         // Check if the ball hit the floor
-        if (ballY <= -10.0) {
+        if (armMovingUp && LeftArm >= 133.0) {
             isBallHeld = true; // Ball is back in the hand
             ballY = -4.0; // Reset ballY
-            ballVelocityY = 0.1; // Reset velocity
+            ballVelocityY = 0.01; // Reset vertical velocity
             ballX = -2.0; // Reset ballX
-            // move it
+            ballVelocityX = 0.3; // Reset horizontal velocity
             glTranslatef(ballX, ballY, 1.0);
-
         }
     }
 
     // Draw the ball
     glutSolidSphere(1.0, 20, 20);
     glPopMatrix();
-
-
 
     // Window frame
     glPushMatrix();
@@ -317,7 +322,10 @@ void resize(int w, int h)
 
 void animate() {
     LeftArm += 0.05 * armFront;  // Adjust the speed as needed
-    if (LeftArm >= 210.0 || LeftArm <= -10.0) armFront = -armFront;  // Swing back and forth
+    if (LeftArm >= 210.0 || LeftArm <= -10.0) {
+        armFront = -armFront;
+        armMovingUp = !armMovingUp;
+    }
     glutPostRedisplay();
 }
 
@@ -325,79 +333,79 @@ void keyInput(unsigned char key, int x, int y)
 {
     switch (key)
     {
-        case 27:
-            exit(0);
-            break;
-        case 'x':
-            Xangle += 5.0;
-            if (Xangle > 360.0) Xangle -= 360.0;
-            glutPostRedisplay();
-            break;
-        case 'X':
-            Xangle -= 5.0;
-            if (Xangle < 0.0) Xangle += 360.0;
-            glutPostRedisplay();
-            break;
-        case 'y':
-            Yangle += 5.0;
-            if (Yangle > 360.0) Yangle -= 360.0;
-            glutPostRedisplay();
-            break;
-        case 'Y':
-            Yangle -= 5.0;
-            if (Yangle < 0.0) Yangle += 360.0;
-            glutPostRedisplay();
-            break;
-        case 'z':
-            Zangle += 5.0;
-            if (Zangle > 360.0) Zangle -= 360.0;
-            glutPostRedisplay();
-            break;
-        case 'Z':
-            Zangle -= 5.0;
-            if (Zangle < 0.0) Zangle += 360.0;
-            glutPostRedisplay();
-            break;
+    case 27:
+        exit(0);
+        break;
+    case 'x':
+        Xangle += 5.0;
+        if (Xangle > 360.0) Xangle -= 360.0;
+        glutPostRedisplay();
+        break;
+    case 'X':
+        Xangle -= 5.0;
+        if (Xangle < 0.0) Xangle += 360.0;
+        glutPostRedisplay();
+        break;
+    case 'y':
+        Yangle += 5.0;
+        if (Yangle > 360.0) Yangle -= 360.0;
+        glutPostRedisplay();
+        break;
+    case 'Y':
+        Yangle -= 5.0;
+        if (Yangle < 0.0) Yangle += 360.0;
+        glutPostRedisplay();
+        break;
+    case 'z':
+        Zangle += 5.0;
+        if (Zangle > 360.0) Zangle -= 360.0;
+        glutPostRedisplay();
+        break;
+    case 'Z':
+        Zangle -= 5.0;
+        if (Zangle < 0.0) Zangle += 360.0;
+        glutPostRedisplay();
+        break;
 
-            // Add these to your `keyInput` function:
-        case 'a':  // Rotate LeftArm counterclockwise
+        // Add these to your `keyInput` function:
+    case 'a':  // Rotate LeftArm counterclockwise
+        LeftArm += 5.0;
+        if (LeftArm > 45.0) LeftArm = 45.0;  // Limit rotation
+        glutPostRedisplay();
+        break;
+    case 'A':  // Rotate LeftArm clockwise
+        LeftArm -= 5.0;
+        if (LeftArm < -45.0) LeftArm = -45.0;  // Limit rotation
+        glutPostRedisplay();
+        break;
+
+    case 'd': // Example to rotate TorsoX
+        TorsoX += 5.0;
+        if (TorsoX > 360.0) TorsoX -= 360.0;
+        glutPostRedisplay();
+        break;
+    case 'l': // Example to rotate LeftLeg
+        LeftLeg += 5.0;
+        if (LeftLeg > 360.0) LeftLeg -= 360.0;
+        glutPostRedisplay();
+        break;
+
+    case ' ':
+        if (armFront)
+        {
             LeftArm += 5.0;
-            if (LeftArm > 45.0) LeftArm = 45.0;  // Limit rotation
-            glutPostRedisplay();
-            break;
-        case 'A':  // Rotate LeftArm clockwise
+            if (LeftArm > 170) armFront = 0;
+
+        }
+        else
+        {
             LeftArm -= 5.0;
-            if (LeftArm < -45.0) LeftArm = -45.0;  // Limit rotation
-            glutPostRedisplay();
-            break;
-
-        case 'd': // Example to rotate TorsoX
-            TorsoX += 5.0;
-            if (TorsoX > 360.0) TorsoX -= 360.0;
-            glutPostRedisplay();
-            break;
-        case 'l': // Example to rotate LeftLeg
-            LeftLeg += 5.0;
-            if (LeftLeg > 360.0) LeftLeg -= 360.0;
-            glutPostRedisplay();
-            break;
-
-        case ' ':
-            if (armFront)
-            {
-                LeftArm += 5.0;
-                if (LeftArm > 170) armFront = 0;
-
-            }
-            else
-            {
-                LeftArm -= 5.0;
-                if (LeftArm < 0) armFront = 1;
-            }
-            glutPostRedisplay();
-            break;
-        default:
-            break;
+            if (LeftArm < 0) armFront = 1;
+        }
+        glutPostRedisplay();
+        break;
+    default:
+        break;
     }
 }
 
@@ -407,8 +415,8 @@ int main(int argc, char** argv)
     glutInitContextVersion(4, 3);
     glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-    glutInitWindowSize(500, 500);
-    glutInitWindowPosition(100, 100);
+    glutInitWindowSize(1000, 1000);
+    glutInitWindowPosition(10, 10);
 
     glutCreateWindow("walls_and_floor.cpp");
 
