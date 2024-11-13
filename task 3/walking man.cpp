@@ -289,7 +289,7 @@ void drawScene(void)
             ballVelocityX = 0.3; // Reset horizontal velocity
             glTranslatef(ballX, ballY, 1.0);
         }
-       
+
     }
 
     // Draw the ball
@@ -340,14 +340,32 @@ void resize(int w, int h)
     glMatrixMode(GL_MODELVIEW);
 }
 
-void animate() {
+void animate(int value) {
     LeftArm += 0.05 * armFront;  // Adjust the speed as needed
     if (LeftArm >= 210.0 || LeftArm <= -10.0) {
         armFront = -armFront;
         armMovingUp = !armMovingUp;
     }
     glutPostRedisplay();
+    glutTimerFunc(1, animate, 0); // 16ms for ~60 FPS
 }
+
+//// Ball animation function
+//void animateBall() {
+//    if (throwBall && !isBallHeld) {
+//        ballY += ballVelocityY;
+//        ballX += ballVelocityX;
+//        ballVelocityY -= 0.001; // Gravity effect
+//
+//        if (ballX >= 20.0 || ballX <= -20.0) {
+//            ballVelocityX = -ballVelocityX;
+//        }
+//        if (ballY <= -9.5) {
+//            ballVelocityY = -ballVelocityY * 0.7; // Bounce effect
+//            ballY = -9.5;
+//        }
+//    }
+//}
 
 void keyInput(unsigned char key, int x, int y)
 {
@@ -444,8 +462,7 @@ int main(int argc, char** argv)
     glutReshapeFunc(resize);
     glutKeyboardFunc(keyInput);
 
-    glutIdleFunc(animate);  // Set idle callback for continuous animation
-
+    glutTimerFunc(1, animate, 0); // Start the timer for animations
 
     glewInit();
     setup();
