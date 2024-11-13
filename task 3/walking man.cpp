@@ -14,9 +14,12 @@ static float LeftArm = 0.0;  //rotate ACW abt z axis
 static float LeftLeg = 0.0;  //rotate leg CW abt z axis
 static float head = 0.0;   //move head back
 static int armFront = 1;
+int verticalBounces = 0;
+int reset = 0;
 
 bool isBallHeld = true;  // Initially, the ball is in the hand
 bool isGoingUp = true;  // Initially, the ball is going up with hand
+bool isBounce = true;
 
 bool armMovingUp = true;
 
@@ -221,6 +224,8 @@ void drawScene(void)
     glPushMatrix();
     glColor3f(1.0, 0.0, 0.0); // Ball color (red)
 
+
+
     if (isBallHeld) {
         // Ball is in hand, follow hand's transformations
         glTranslatef(0.0, 1.3, -0.5);
@@ -261,15 +266,30 @@ void drawScene(void)
             ballVelocityX = -ballVelocityX; // Reflect the X velocity
         }
 
-        // Check if the ball hit the floor
+        if (ballX >= 7.4 && ballX <= 7.5 && ballY <= -9.028) {  // Check for ball hitting the floor
+            if (isBounce && verticalBounces < 2) {
+                ballVelocityX = 0.0;    //no motion in the x direction
+                ballVelocityY = -ballVelocityY * 0.7; // Reverse and reduce velocity for vertical bounce (e.g., 70% bounce energy)
+                verticalBounces++; // Increment bounce count
+            }
+            // Ensure the ball doesn't go below the floor
+            if (ballY < -9.0) {
+                ballY = -8.0;
+                isBounce = false;  //don't reset bouncing
+            }
+
+        }
         if (armMovingUp && LeftArm >= 133.0) {
+            isBounce = true;   // Ball can be rebounced
             isBallHeld = true; // Ball is back in the hand
+            verticalBounces = 0; // Reset the vertical Bounces counter
             ballY = -4.0; // Reset ballY
             ballVelocityY = 0.01; // Reset vertical velocity
             ballX = -2.0; // Reset ballX
             ballVelocityX = 0.3; // Reset horizontal velocity
             glTranslatef(ballX, ballY, 1.0);
         }
+       
     }
 
     // Draw the ball
@@ -367,7 +387,7 @@ void keyInput(unsigned char key, int x, int y)
         glutPostRedisplay();
         break;
 
-        // Add these to your `keyInput` function:
+        // Add these to your keyInput function:
     case 'a':  // Rotate LeftArm counterclockwise
         LeftArm += 5.0;
         if (LeftArm > 45.0) LeftArm = 45.0;  // Limit rotation
