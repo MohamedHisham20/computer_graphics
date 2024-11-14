@@ -23,14 +23,43 @@ bool isBounce = true;
 
 bool armMovingUp = true;
 
+static bool allow_move = false;
+
 float ballX = -2.0, ballY = -4.0, ballZ = 0.0; // Ball's position
 float ballVelocityY = 0.01; // Initial upward velocity for throwing
 float ballVelocityX = 0.3;
 
 
-//void animate(void) {
-//    LeftArm += 10;
-//}
+void checkBallReleased()
+{
+    // Check if arm is at the top of its movement
+    if (LeftArm >= 130.0 && LeftArm <= 131.0) {
+        if (isGoingUp && !armMovingUp) {
+            isBallHeld = false;
+            isGoingUp = false;
+        }
+        else { // Arm is at the top, release the ball
+            // Release the ball
+            isGoingUp = true;
+
+            // update the ballX and ballY values according to current ball location
+            ballX = 2.0;
+            ballY = 6.0;
+        }
+    }
+    else if (armMovingUp && LeftArm >= 133.0) {
+        isBounce = true;   // Ball can be rebounced
+        isBallHeld = true; // Ball is back in the hand
+        verticalBounces = 0; // Reset the vertical Bounces counter
+        ballY = -1.0; // Reset ballY
+        ballVelocityY = 0.01; // Reset vertical velocity
+        ballX = 0.0; // Reset ballX
+        ballVelocityX = 0.3; // Reset horizontal velocity
+        glTranslatef(ballX, ballY, -0.5);
+    }
+
+}
+
 
 // Drawing routine.
 void drawScene(void)
@@ -224,7 +253,7 @@ void drawScene(void)
     glPushMatrix();
     glColor3f(1.0, 0.0, 0.0); // Ball color (red)
 
-
+    checkBallReleased();
 
     if (isBallHeld) {
         // Ball is in hand, follow hand's transformations
@@ -233,24 +262,6 @@ void drawScene(void)
         glTranslatef(0.0, -1.3, 0.5);
         glRotatef(50, 0.0, 1.0, 0.0);
         glTranslatef(-2.0, -4.0, 1.0); // Position in front of hand
-
-
-        // Check if arm is at the top of its movement
-        if (LeftArm >= 130.0 && LeftArm <= 131.0) {
-            if (isGoingUp && !armMovingUp) {
-                isBallHeld = false;
-                isGoingUp = false;
-            }
-            else { // Arm is at the top, release the ball
-                // Release the ball
-                isGoingUp = true;
-
-                // update the ballX and ballY values according to current ball location
-                ballX = 2.0;
-                ballY = 6.0;
-            }
-        }
-
     }
     else {
         // Ball is released, apply movement
@@ -258,38 +269,26 @@ void drawScene(void)
 
         // Update ball position
         ballY += ballVelocityY;
-        ballVelocityY -= 0.003; // Gravity effect
-        ballX += ballVelocityX; // Move ball horizontally
-
+        ballVelocityY -= 0.003;  // Gravity effect
+        ballX += ballVelocityX;  // Move ball horizontally
 
         if (ballX >= 20.0) {
             ballVelocityX = -ballVelocityX; // Reflect the X velocity
         }
 
-        if (ballX >= 7.4 && ballX <= 7.5 && ballY <= -9.028) {  // Check for ball hitting the floor
+        if (ballX >= 7.4 && ballX <= 7.5 && ballY <= -9.028) {  // Ball hits the floor
             if (isBounce && verticalBounces < 2) {
-                ballVelocityX = 0.0;    //no motion in the x direction
-                ballVelocityY = -ballVelocityY * 0.7; // Reverse and reduce velocity for vertical bounce (e.g., 70% bounce energy)
+                ballVelocityX = 0.0;    // Stop horizontal motion
+                ballVelocityY = -ballVelocityY * 0.7; // Bounce (70% of velocity)
                 verticalBounces++; // Increment bounce count
             }
-            // Ensure the ball doesn't go below the floor
-            if (ballY < -9.0) {
-                ballY = -8.0;
-                isBounce = false;  //don't reset bouncing
+
+            // Stop the ball after bouncing twice
+            if (verticalBounces >= 2) {
+                ballVelocityY = 0.0;  // No more vertical movement
+                ballVelocityX = 0.0;  // No more horizontal movement
             }
-
         }
-        if (armMovingUp && LeftArm >= 133.0) {
-            isBounce = true;   // Ball can be rebounced
-            isBallHeld = true; // Ball is back in the hand
-            verticalBounces = 0; // Reset the vertical Bounces counter
-            ballY = -4.0; // Reset ballY
-            ballVelocityY = 0.01; // Reset vertical velocity
-            ballX = -2.0; // Reset ballX
-            ballVelocityX = 0.3; // Reset horizontal velocity
-            glTranslatef(ballX, ballY, 1.0);
-        }
-
     }
 
     // Draw the ball
@@ -324,6 +323,7 @@ void drawScene(void)
     glutSwapBuffers();
 }
 
+
 void setup(void)
 {
     glClearColor(1.0, 1.0, 1.0, 0.0);
@@ -341,14 +341,41 @@ void resize(int w, int h)
 }
 
 void animate(int value) {
-    LeftArm += 0.05 * armFront;  // Adjust the speed as needed
-    if (LeftArm >= 210.0 || LeftArm <= -10.0) {
-        armFront = -armFront;
-        armMovingUp = !armMovingUp;
+    if (allow_move == true) 
+    {
+        // Arm animation (as per your previous implementation)
+        LeftArm += 1 * armFront;
+        if (LeftArm >= 210.0 || LeftArm <= -10.0) {
+            armFront = -armFront;
+            armMovingUp = !armMovingUp;
+        }
+
+        // Ball animation when released
+        if (!isBallHeld) {
+            ballY += ballVelocityY;
+            ballVelocityY -= 0.003;  // Gravity effect
+            ballX += ballVelocityX;
+
+            // Check for floor collision and bounce
+            if (ballY <= -9.0 && verticalBounces < 2) {
+                ballY = -9.0;  // Prevent ball from going below floor
+                ballVelocityY = -ballVelocityY * 0.7;  // Reverse and reduce velocity for bounce
+                verticalBounces++;
+            }
+
+            // Stop ball after it has bounced twice
+            if (verticalBounces >= 2 && ballY <= -9.0) {
+                ballY = -9.0;  // Keep ball on floor
+                ballVelocityY = 0.0;
+                ballVelocityX = 0.0;
+            }
+        }
+
     }
-    glutPostRedisplay();
-    glutTimerFunc(1, animate, 0); // 16ms for ~60 FPS
+        glutPostRedisplay();
+        glutTimerFunc(16, animate, 0);  // 60 FPS
 }
+
 
 //// Ball animation function
 //void animateBall() {
@@ -374,6 +401,31 @@ void keyInput(unsigned char key, int x, int y)
     case 27:
         exit(0);
         break;
+    case ' ':
+        //if (isBallHeld) {
+        //    // Release the ball with initial velocity
+        //    isBallHeld = false;
+        //    ballVelocityY = 0.1;  // Initial upward velocity
+        //    ballVelocityX = 0.3;  // Set a horizontal velocity if needed
+        //    isBounce = true;
+        //    verticalBounces = 0;  // Reset bounce counter
+        //}
+        //else {
+        //    // Reset ball to hand
+        //    isBallHeld = true;
+        //    ballX = -2.0;  // Ball position in hand
+        //    ballY = -4.0;
+        //    ballVelocityY = 0.0;  // Reset velocity
+        //}
+
+        if (allow_move == false)
+            // Allow the animation to start
+            allow_move = true;
+        else
+            allow_move = false;
+
+        break;
+
     case 'x':
         Xangle += 5.0;
         if (Xangle > 360.0) Xangle -= 360.0;
@@ -384,6 +436,7 @@ void keyInput(unsigned char key, int x, int y)
         if (Xangle < 0.0) Xangle += 360.0;
         glutPostRedisplay();
         break;
+
     case 'y':
         Yangle += 5.0;
         if (Yangle > 360.0) Yangle -= 360.0;
@@ -428,20 +481,7 @@ void keyInput(unsigned char key, int x, int y)
         glutPostRedisplay();
         break;
 
-    case ' ':
-        if (armFront)
-        {
-            LeftArm += 5.0;
-            if (LeftArm > 170) armFront = 0;
 
-        }
-        else
-        {
-            LeftArm -= 5.0;
-            if (LeftArm < 0) armFront = 1;
-        }
-        glutPostRedisplay();
-        break;
     default:
         break;
     }
