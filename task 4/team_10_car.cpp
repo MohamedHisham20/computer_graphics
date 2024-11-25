@@ -85,6 +85,7 @@ public:
 
 private:
 	void drawCircle(float radius, unsigned char colorR, unsigned char colorG, unsigned char colorB);
+	void drawCube(float size);
 };
 
 // Cuboid default constructor.
@@ -134,28 +135,106 @@ void Target::drawCircle(float radius, unsigned char colorR, unsigned char colorG
 	glColor3ub(colorR, colorG, colorB);
 	glBegin(GL_TRIANGLE_FAN);
 	glVertex3f(0.0, 0.0, 0.0);
-	for (int i = 0; i <= 100; i++)
+	for (int i = 0; i <= 360; i++)
 	{
-		float angle = 2 * M_PI * i / 100;
+		float angle = 2 * M_PI * i / 360;
 		glVertex3f(radius * cos(angle), radius * sin(angle), 0.0);
 	}
 	glEnd();
 }
 
-// Function to draw the target.
-void Target::draw()
-{
+// Function to draw a cube.
+void Target::drawCube(float size) {
+	float halfSize = size / 2.0f;
+
+	glBegin(GL_QUADS);
+
+	// Front face (with circles)
+	glColor3f(1.0f, 1.0f, 1.0f); // White for the base of the face
+	glVertex3f(-halfSize, -halfSize, halfSize);
+	glVertex3f(halfSize, -halfSize, halfSize);
+	glVertex3f(halfSize, halfSize, halfSize);
+	glVertex3f(-halfSize, halfSize, halfSize);
+
+	// Back face
+	glColor3f(0.8f, 0.8f, 0.8f); // Light gray
+	glVertex3f(-halfSize, -halfSize, -halfSize);
+	glVertex3f(halfSize, -halfSize, -halfSize);
+	glVertex3f(halfSize, halfSize, -halfSize);
+	glVertex3f(-halfSize, halfSize, -halfSize);
+
+	// Top face
+	glColor3f(0.6f, 0.6f, 0.6f); // Darker gray
+	glVertex3f(-halfSize, halfSize, halfSize);
+	glVertex3f(halfSize, halfSize, halfSize);
+	glVertex3f(halfSize, halfSize, -halfSize);
+	glVertex3f(-halfSize, halfSize, -halfSize);
+
+	// Bottom face
+	glColor3f(0.6f, 0.6f, 0.6f); // Darker gray
+	glVertex3f(-halfSize, -halfSize, halfSize);
+	glVertex3f(halfSize, -halfSize, halfSize);
+	glVertex3f(halfSize, -halfSize, -halfSize);
+	glVertex3f(-halfSize, -halfSize, -halfSize);
+
+	// Right face
+	glColor3f(0.7f, 0.7f, 0.7f); // Medium gray
+	glVertex3f(halfSize, -halfSize, halfSize);
+	glVertex3f(halfSize, halfSize, halfSize);
+	glVertex3f(halfSize, halfSize, -halfSize);
+	glVertex3f(halfSize, -halfSize, -halfSize);
+
+	// Left face
+	glColor3f(0.7f, 0.7f, 0.7f); // Medium gray
+	glVertex3f(-halfSize, -halfSize, halfSize);
+	glVertex3f(-halfSize, halfSize, halfSize);
+	glVertex3f(-halfSize, halfSize, -halfSize);
+	glVertex3f(-halfSize, -halfSize, -halfSize);
+
+	glEnd();
+}
+
+// Function to draw the target as a cube with circles on its front face.
+void Target::draw() {
 	glPushMatrix();
 	glTranslatef(getCenterX(), getCenterY(), getCenterZ());
 
-	// Draw concentric circles with different colors.
-	drawCircle(getRadius(), 255, 0, 0); // Red outer circle
-	drawCircle(getRadius() * 0.75, 255, 255, 0); // Yellow middle circle
-	drawCircle(getRadius() * 0.5, 0, 255, 0); // Green inner circle
-	drawCircle(getRadius() * 0.25, 0, 0, 255); // Blue center circle
+	// Draw the cube.
+	drawCube(getRadius() * 2.0f); // Cube size is twice the radius of the circle.
+
+	// Draw concentric circles on the front face with depth offsets.
+	glEnable(GL_POLYGON_OFFSET_FILL);
+
+	// Draw the red outer circle.
+	glPushMatrix();
+	glTranslatef(0.0f, 0.0f, getRadius() + 0.01f); // Offset slightly forward.
+	drawCircle(getRadius(), 255, 0, 0);           // Red outer circle.
+	glPopMatrix();
+
+	// Draw the yellow middle circle.
+	glPushMatrix();
+	glTranslatef(0.0f, 0.0f, getRadius() + 0.02f); // Slightly further forward than the red circle.
+	drawCircle(getRadius() * 0.75f, 255, 255, 0);  // Yellow middle circle.
+	glPopMatrix();
+
+	// Draw the green inner circle.
+	glPushMatrix();
+	glTranslatef(0.0f, 0.0f, getRadius() + 0.03f); // Slightly further forward than the yellow circle.
+	drawCircle(getRadius() * 0.5f, 0, 255, 0);     // Green inner circle.
+	glPopMatrix();
+
+	// Draw the blue center circle.
+	glPushMatrix();
+	glTranslatef(0.0f, 0.0f, getRadius() + 0.04f); // Slightly further forward than the green circle.
+	drawCircle(getRadius() * 0.25f, 0, 0, 255);    // Blue center circle.
+	glPopMatrix();
+
+	glDisable(GL_POLYGON_OFFSET_FILL);
 
 	glPopMatrix();
 }
+
+
 
 Cuboid* arrayCuboids[ROWS][COLUMNS]; // Use pointers
 
