@@ -67,11 +67,24 @@ public:
 	float getCenterY() { return centerY; }
 	float getCenterZ() { return centerZ; }
 	float getRadius() { return radius; }
-	void draw();
+	virtual void draw(); // Make draw virtual for polymorphism
 
-private:
+	virtual ~Cuboid() = default; // Add a virtual destructor for safety
+
+protected:
 	float centerX, centerY, centerZ, radius;
 	unsigned char color[3];
+};
+
+// Target inherits from Cuboid
+class Target : public Cuboid
+{
+public:
+	Target(float x, float y, float z, float r);
+	void draw() override; // Override the draw method
+
+private:
+	void drawCircle(float radius, unsigned char colorR, unsigned char colorG, unsigned char colorB);
 };
 
 // Cuboid default constructor.
@@ -112,16 +125,6 @@ void Cuboid::draw()
 	}
 }
 
-class Target : public Cuboid
-{
-public:
-	Target(float x, float y, float z, float r);
-	void draw();
-
-private:
-	void drawCircle(float radius, unsigned char colorR, unsigned char colorG, unsigned char colorB);
-};
-
 // Target constructor.
 Target::Target(float x, float y, float z, float r) : Cuboid(x, y, z, r, 0, 0, 0) {}
 
@@ -152,10 +155,10 @@ void Target::draw()
 	drawCircle(getRadius() * 0.25, 0, 0, 255); // Blue center circle
 
 	glPopMatrix();
-	void draw();
 }
 
-Cuboid arrayCuboids[ROWS][COLUMNS]; // Global array of Cuboids.
+Cuboid* arrayCuboids[ROWS][COLUMNS]; // Use pointers
+
 
 // Routine to count the number of frames drawn every second.
 void frameCounter(int value)
@@ -181,31 +184,32 @@ void setup(void)
 	glEndList();
 
 	// Initialize global arrayCuboids.
-	for (j = 0; j < COLUMNS; j++)
-		for (i = 0; i < ROWS - 1; i++)
+	for (int j = 0; j < COLUMNS; j++)
+	{
+		for (int i = 0; i < ROWS - 1; i++)
+		{
 			if (rand() % 100 < FILL_PROBABILITY)
-				// If rand()%100 >= FILL_PROBABILITY the default constructor Cuboid remains in the slot 
-				// which indicates that there is no Cuboid there because the default's radius is 0.
 			{
-				// Position the Cuboids depending on if there is an even or odd number of columns
-				// so that the spacecraft faces the middle of the Cuboid field.
-				if (COLUMNS % 2) // Odd number of columns.
-					arrayCuboids[i][j] = Cuboid(30.0 * (-COLUMNS / 2 + j), 0.0, -40.0 - 30.0 * i, 3.0,
+				if (COLUMNS % 2) // Odd number of columns
+					arrayCuboids[i][j] = new Cuboid(30.0 * (-COLUMNS / 2 + j), 0.0, -40.0 - 30.0 * i, 3.0,
 						rand() % 256, rand() % 256, rand() % 256);
-				else // Even number of columns.
-					arrayCuboids[i][j] = Cuboid(15 + 30.0 * (-COLUMNS / 2 + j), 0.0, -40.0 - 30.0 * i, 3.0,
+				else // Even number of columns
+					arrayCuboids[i][j] = new Cuboid(15 + 30.0 * (-COLUMNS / 2 + j), 0.0, -40.0 - 30.0 * i, 3.0,
 						rand() % 256, rand() % 256, rand() % 256);
 			}
+			else
+			{
+				arrayCuboids[i][j] = nullptr; // No Cuboid
+			}
+		}
+	}
 
-	// generate the target
-
-	arrayCuboids[ROWS - 1][static_cast<int>(floor(COLUMNS / 2))] = Cuboid(0.0, 0.0, -40.0 - 30.0 * (ROWS - 1), 3.0, 255, 0, 0);
-	//arrayCuboids[ROWS - 1][static_cast<int>(floor(COLUMNS / 2))] = Target(0.0, 0.0, -40.0 - 30.0 * (ROWS - 1), 5.0);
+	// Add Target to the last row
+	arrayCuboids[ROWS - 1][COLUMNS / 2] = new Target(0.0, 0.0, -40.0 - 30.0 * (ROWS - 1), 5.0);
 
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-
-	glutTimerFunc(0, frameCounter, 0); // Initial call of frameCounter().
+	glutTimerFunc(0, frameCounter, 0);
 }
 
 // Function to check if two spheres centered at (x1,y1,z1) and (x2,y2,z2) with
@@ -225,13 +229,15 @@ int CuboidCraftCollision(float x, float z, float a)
 
 	// Check for collision with each Cuboid.
 	for (j = 0; j < COLUMNS; j++)
-		for (i = 0; i < ROWS; i++)
-			if (arrayCuboids[i][j].getRadius() > 0) // If Cuboid exists.
+		for (i = 0; i < ROWS; i++) {
+			const auto& cuboid = arrayCuboids[i][j]; // Reference to current cuboid.
+			if (cuboid && cuboid->getRadius() > 0) // If Cuboid exists.
 				if (checkSpheresIntersection(x - 5 * sin((M_PI / 180.0) * a), 0.0,
 					z - 5 * cos((M_PI / 180.0) * a), 7.072,
-					arrayCuboids[i][j].getCenterX(), arrayCuboids[i][j].getCenterY(),
-					arrayCuboids[i][j].getCenterZ(), arrayCuboids[i][j].getRadius()))
+					cuboid->getCenterX(), cuboid->getCenterY(),
+					cuboid->getCenterZ(), cuboid->getRadius()))
 					return 1;
+		}
 	return 0;
 }
 
@@ -258,9 +264,15 @@ void drawScene(void)
 	gluLookAt(0.0, 10.0, 20.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
 	// Draw all the Cuboids in arrayCuboids.
-	for (j = 0; j < COLUMNS; j++)
-		for (i = 0; i < ROWS; i++)
-			arrayCuboids[i][j].draw();
+	for (int j = 0; j < COLUMNS; j++)
+	{
+		for (int i = 0; i < ROWS; i++)
+		{
+			if (arrayCuboids[i][j]) // Check if the pointer is not null
+				arrayCuboids[i][j]->draw();
+		}
+	}
+
 
 	// Draw spacecraft.
 	glPushMatrix();
@@ -302,9 +314,15 @@ void drawScene(void)
 		0.0);
 
 	// Draw all the Cuboids in arrayCuboids.
-	for (j = 0; j < COLUMNS; j++)
-		for (i = 0; i < ROWS; i++)
-			arrayCuboids[i][j].draw();
+	for (int j = 0; j < COLUMNS; j++)
+	{
+		for (int i = 0; i < ROWS; i++)
+		{
+			if (arrayCuboids[i][j]) // Check if the pointer is not null
+				arrayCuboids[i][j]->draw();
+		}
+	}
+
 	// End right viewport.
 
 	glutSwapBuffers();
