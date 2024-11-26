@@ -147,7 +147,7 @@ void Target::drawCircle(float radius, unsigned char colorR, unsigned char colorG
 void Target::drawCube(float size) {
 	float halfSize = size / 2.0f;
 
-	glBegin(GL_QUADS);
+	glBegin(GL_POLYGON);
 
 	// Front face (with circles)
 	glColor3f(1.0f, 1.0f, 1.0f); // White for the base of the face
@@ -247,6 +247,159 @@ void frameCounter(int value)
 	frameCount = 0;
 	glutTimerFunc(1000, frameCounter, 1);
 }
+void drawCar() {
+
+	glPushMatrix();
+	glColor3f(1.0, 0.0, 0.0);
+	glTranslatef(0.0, -0.5, 0.0);
+	glScalef(1.5, 0.5, 3.0);
+	glutSolidCube(5.0);
+	glPopMatrix();
+
+
+	glPushMatrix();
+	glColor3f(0.8, 0.0, 0.0);
+	glTranslatef(0.0, 2.0, 0.0);
+	glScalef(1.2, 0.5, 2.0);
+	glutSolidCube(5.0);
+
+	// Windows
+	glPushMatrix();
+	glColor3f(0.6, 0.8, 1.0);
+
+	// Left side windows
+	glBegin(GL_QUADS);
+
+	// Front-left window
+	glVertex3f(-2.6, 2.5, 2.0);  
+	glVertex3f(-2.6, 0.0, 2.0); 
+	glVertex3f(-2.6, 0.0, 0.7);  
+	glVertex3f(-2.6, 2.5, 0.7);  
+
+	// Rear-left window
+	glVertex3f(-2.6, 2.5, -0.7);  
+	glVertex3f(-2.6, 0.0, -0.7);  
+	glVertex3f(-2.6, 0.0, -2.0);  
+	glVertex3f(-2.6, 2.5, -2.0);  
+	glEnd();
+
+	// Right side windows
+	glBegin(GL_QUADS);
+	// Front-right window
+	glVertex3f(2.6, 2.5, 2.0);  
+	glVertex3f(2.6, 0.0, 2.0);  
+	glVertex3f(2.6, 0.0, 0.7);  
+	glVertex3f(2.6, 2.5, 0.7);  
+
+	// Rear-right window
+	glVertex3f(2.6, 2.5, -0.7); 
+	glVertex3f(2.6, 0.0, -0.7);  
+	glVertex3f(2.6, 0.0, -2.0);
+	glVertex3f(2.6, 2.5, -2.0);
+	glEnd();
+
+	// Front window
+	glBegin(GL_POLYGON);
+	glVertex3f(-2.5, 1.5, 2.6);
+	glVertex3f(2.5, 1.5, 2.6);
+	glVertex3f(2.5, -1.5, 2.6);
+	glVertex3f(-2.5, -1.5, 2.6);
+	glEnd();
+
+	// back window
+	glBegin(GL_POLYGON);
+	glVertex3f(-2.4, 1.5, -2.6);
+	glVertex3f(2.4, 1.5, -2.6);
+	glVertex3f(2.4, -1.5, -2.6);
+	glVertex3f(-2.4, -1.5, -2.6);
+	glEnd();
+
+	glPopMatrix();
+	glPopMatrix();
+	// Wheels
+	glPushMatrix();
+	glColor3f(0.0, 0.0, 0.0);
+
+	// Front-left wheel
+	glPushMatrix();
+	glTranslatef(-3.0, -2.5, 7.0);
+	glRotatef(90, 0, 1, 0);
+	glutSolidTorus(0.5, 1.0, 20, 20);
+	glPopMatrix();
+
+	// Front-right wheel
+	glPushMatrix();
+	glTranslatef(3.0, -2.5, 7.0);
+	glRotatef(90, 0, 1, 0);
+	glutSolidTorus(0.5, 1.0, 20, 20);
+	glPopMatrix();
+
+	// Rear-left wheel
+	glPushMatrix();
+	glTranslatef(-3.0, -2.5, -7.0);
+	glRotatef(90, 0, 1, 0);
+	glutSolidTorus(0.5, 1.0, 20, 20);
+	glPopMatrix();
+
+	// Rear-right wheel
+	glPushMatrix();
+	glTranslatef(3.0, -2.5, -7.0);
+	glRotatef(90, 0, 1, 0);
+	glutSolidTorus(0.5, 1.0, 20, 20);
+	glPopMatrix();
+
+	glPopMatrix();
+
+	// Headlights
+	glPushMatrix();
+	glColor3f(1.0, 1.0, 0.5);
+
+	// front Left headlight
+	glPushMatrix();
+	glTranslatef(-2.0, 0.5, 7.5);
+	glutSolidSphere(0.5, 20, 20);
+	glPopMatrix();
+
+	// front Right headlight
+	glPushMatrix();
+	glTranslatef(2.0, 0.5, 7.5);
+	glutSolidSphere(0.5, 20, 20);
+	glPopMatrix();
+
+
+	//// back Left headlight
+	//glPushMatrix();
+	//glTranslatef(-2.0, 0.5, -7.5);
+	//glutSolidSphere(0.5, 20, 20);
+	//glPopMatrix();
+
+	//// back Right headlight
+	//glPushMatrix();
+	//glTranslatef(2.0, 0.5, -7.5);
+	//glutSolidSphere(0.5, 20, 20);
+	//glPopMatrix();
+
+	glPopMatrix();
+
+	//gray rectangles 
+	glPushMatrix();
+	glColor3f(0.2, 0.2, 0.2);
+
+	// Front gray rectangle 
+	glPushMatrix();
+	glTranslatef(0.0, -1.0, 7.5);
+	glScalef(1.5, 0.3, 0.1);
+	glutSolidCube(5.0);
+	glPopMatrix();
+
+	// back gray rectangle
+	glPushMatrix();
+	glTranslatef(0.0, -1.0, -7.5);
+	glScalef(1.5, 0.3, 0.1);
+	glutSolidCube(5.0);
+	glPopMatrix();
+	glPopMatrix();
+}
 
 // Initialization routine.
 void setup(void)
@@ -257,8 +410,7 @@ void setup(void)
 	glNewList(spacecraft, GL_COMPILE);
 	glPushMatrix();
 	glRotatef(180.0, 0.0, 1.0, 0.0); // To make the spacecraft point down the $z$-axis initially.
-	glColor3f(1.0, 1.0, 1.0);
-	glutWireCone(5.0, 10.0, 10, 10);
+	drawCar();
 	glPopMatrix();
 	glEndList();
 
@@ -287,7 +439,7 @@ void setup(void)
 	arrayCuboids[ROWS - 1][COLUMNS / 2] = new Target(0.0, 0.0, -40.0 - 30.0 * (ROWS - 1), 5.0);
 
 	glEnable(GL_DEPTH_TEST);
-	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glClearColor(1.0, 1.0, 1.0, 0.0);
 	glutTimerFunc(0, frameCounter, 0);
 }
 
@@ -298,6 +450,9 @@ int checkSpheresIntersection(float x1, float y1, float z1, float r1,
 {
 	return ((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) + (z1 - z2) * (z1 - z2) <= (r1 + r2) * (r1 + r2));
 }
+
+
+
 
 // Function to check if the spacecraft collides with an Cuboid when the center of the base
 // of the craft is at (x, 0, z) and it is aligned at an angle a to to the -z direction.
