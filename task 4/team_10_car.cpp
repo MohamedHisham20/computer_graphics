@@ -40,12 +40,13 @@
 							 // filled with an Cuboid. It should be an integer between 0 and 100.
 
 // Globals.
-static void* font = reinterpret_cast<void*>(GLUT_BITMAP_8_BY_13); // Font selection.
+static void* font = GLUT_BITMAP_HELVETICA_18; // Using a different font that should be defined
+// Font selection.
 static int width, height; // Size of the OpenGL window.
 static float angle = 0.0; // Angle of the spacecraft.
 static float xVal = 0, zVal = 0; // Co-ordinates of the spacecraft.
 static int isCollision = 0; // Is there collision between the spacecraft and an Cuboid?
-static unsigned int spacecraft; // Display lists base index.
+static unsigned int carSpace; // Display lists base index.
 static int frameCount = 0; // Number of frames
 
 // Routine to draw a bitmap character string.
@@ -406,10 +407,10 @@ void setup(void)
 {
 	int i, j;
 
-	spacecraft = glGenLists(1);
-	glNewList(spacecraft, GL_COMPILE);
+	carSpace = glGenLists(1);
+	glNewList(carSpace, GL_COMPILE);
 	glPushMatrix();
-	glRotatef(180.0, 0.0, 1.0, 0.0); // To make the spacecraft point down the $z$-axis initially.
+	glRotatef(180.0, 0.0, 1.0, 0.0); 
 	drawCar();
 	glPopMatrix();
 	glEndList();
@@ -457,7 +458,7 @@ int checkSpheresIntersection(float x1, float y1, float z1, float r1,
 // Function to check if the spacecraft collides with an Cuboid when the center of the base
 // of the craft is at (x, 0, z) and it is aligned at an angle a to to the -z direction.
 // Collision detection is approximate as instead of the spacecraft we use a bounding sphere.
-int CuboidCraftCollision(float x, float z, float a)
+int CuboidCarCollision(float x, float z, float a)
 {
 	int i, j;
 
@@ -466,8 +467,8 @@ int CuboidCraftCollision(float x, float z, float a)
 		for (i = 0; i < ROWS; i++) {
 			const auto& cuboid = arrayCuboids[i][j]; // Reference to current cuboid.
 			if (cuboid && cuboid->getRadius() > 0) // If Cuboid exists.
-				if (checkSpheresIntersection(x - 5 * sin((M_PI / 180.0) * a), 0.0,
-					z - 5 * cos((M_PI / 180.0) * a), 7.072,
+				if (checkSpheresIntersection(x-0.1 * sin((M_PI / 180.0) * a), 0.0,
+					z-0.1 * cos((M_PI / 180.0) * a), 7.072,
 					cuboid->getCenterX(), cuboid->getCenterY(),
 					cuboid->getCenterZ(), cuboid->getRadius()))
 					return 1;
@@ -491,7 +492,7 @@ void drawScene(void)
 	glPushMatrix();
 	glColor3f(1.0, 0.0, 0.0);
 	glRasterPos3f(-28.0, 25.0, -30.0);
-	if (isCollision) writeBitmapString(font, "Cannot - will crash!");
+	if (isCollision) writeBitmapString(font, "You LOST, GAME OVER!");
 	glPopMatrix();
 
 	// Fixed camera.
@@ -512,7 +513,7 @@ void drawScene(void)
 	glPushMatrix();
 	glTranslatef(xVal, 0.0, zVal);
 	glRotatef(angle, 0.0, 1.0, 0.0);
-	glCallList(spacecraft);
+	glCallList(carSpace);
 	glPopMatrix();
 	// End left viewport.
 
@@ -524,7 +525,7 @@ void drawScene(void)
 	glPushMatrix();
 	glColor3f(1.0, 0.0, 0.0);
 	glRasterPos3f(-28.0, 25.0, -30.0);
-	if (isCollision) writeBitmapString((void*)font, "Cannot - will crash!");
+	if (isCollision) writeBitmapString((void*)font, "You LOST, GAME OVER!");
 	glPopMatrix();
 
 	// Draw a vertical line on the left of the viewport to separate the two viewports
@@ -536,16 +537,17 @@ void drawScene(void)
 	glEnd();
 	glLineWidth(1.0);
 
-	// Locate the camera at the tip of the cone and pointing in the direction of the cone.
-	gluLookAt(xVal - 10 * sin((M_PI / 180.0) * angle),
-		0.0,
-		zVal - 10 * cos((M_PI / 180.0) * angle),
-		xVal - 11 * sin((M_PI / 180.0) * angle),
-		0.0,
-		zVal - 11 * cos((M_PI / 180.0) * angle),
-		0.0,
-		1.0,
-		0.0);
+	gluLookAt(
+		xVal - 2 * sin((M_PI / 180.0) * angle),  // Camera position X
+		1.0,                                     // Camera height Y
+		zVal - 2 * cos((M_PI / 180.0) * angle),  // Camera position Z
+		xVal - 5 * sin((M_PI / 180.0) * angle),  // Look-at point X
+		1.0,                                     // Look-at height Y
+		zVal - 5 * cos((M_PI / 180.0) * angle),  // Look-at point Z
+		0.0,                                     // Up vector X
+		1.0,                                     // Up vector Y
+		0.0                                      // Up vector Z
+	);
 
 	// Draw all the Cuboids in arrayCuboids.
 	for (int j = 0; j < COLUMNS; j++)
@@ -613,7 +615,7 @@ void specialKeyInput(int key, int x, int y)
 	if (tempAngle < 0.0) tempAngle += 360.0;
 
 	// Move spacecraft to next position only if there will not be collision with an Cuboid.
-	if (!CuboidCraftCollision(tempxVal, tempzVal, tempAngle))
+	if (!CuboidCarCollision(tempxVal, tempzVal, tempAngle))
 	{
 		isCollision = 0;
 		xVal = tempxVal;
@@ -658,4 +660,3 @@ int main(int argc, char** argv)
 
 	glutMainLoop();
 }
-
