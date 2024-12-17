@@ -119,6 +119,18 @@ void writeBitmapString(void* font, const char* string)
 	for (c = string; *c != '\0'; c++) glutBitmapCharacter(font, *c);
 }
 
+void setMaterialProperties(GLfloat r, GLfloat g, GLfloat b) {
+	GLfloat matAmbient[] = { r * 0.25f, g * 0.25f, b * 0.25f, 1.0f };  // Ambient color
+	GLfloat matDiffuse[] = { r, g, b, 1.0f };                      // Diffuse color
+	GLfloat matSpecular[] = { r, g, b, 1.0f };            // Specular color
+	GLfloat matShininess[] = { 50.0f };                            // Shininess factor
+
+	glMaterialfv(GL_FRONT, GL_AMBIENT, matAmbient);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, matDiffuse);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, matSpecular);
+	glMaterialfv(GL_FRONT, GL_SHININESS, matShininess);
+}
+
 void menuCallback(int option) {
 	if (option == 0) {
 		id = 0; 
@@ -203,6 +215,7 @@ void Cuboid::draw()
 		glPushMatrix();
 		glTranslatef(centerX, centerY, centerZ);
 		glColor3ubv(color);
+		setMaterialProperties(color[0]/128, color[1]/128, color[2]/128);
 		glutSolidCube(radius);
 		glPopMatrix();
 	}
@@ -215,6 +228,7 @@ Target::Target(float x, float y, float z, float r) : Cuboid(x, y, z, r, 0, 0, 0)
 void Target::drawCircle(float radius, unsigned char colorR, unsigned char colorG, unsigned char colorB)
 {
 	glColor3ub(colorR, colorG, colorB);
+	setMaterialProperties(colorR / 15, colorG / 15, colorB / 15);
 	glBegin(GL_TRIANGLE_FAN);
 	glVertex3f(0.0, 0.0, 0.0);
 	for (int i = 0; i <= 360; i++)
@@ -233,6 +247,7 @@ void Target::drawCube(float size) {
 
 	// Front face (with circles)
 	glColor3f(1.0f, 1.0f, 1.0f); // White for the base of the face
+	setMaterialProperties(1, 1, 1);
 	glVertex3f(-halfSize, -halfSize, halfSize);
 	glVertex3f(halfSize, -halfSize, halfSize);
 	glVertex3f(halfSize, halfSize, halfSize);
@@ -240,6 +255,7 @@ void Target::drawCube(float size) {
 
 	// Back face
 	glColor3f(0.8f, 0.8f, 0.8f); // Light gray
+	setMaterialProperties(0.8,0.8,0.8);
 	glVertex3f(-halfSize, -halfSize, -halfSize);
 	glVertex3f(halfSize, -halfSize, -halfSize);
 	glVertex3f(halfSize, halfSize, -halfSize);
@@ -247,6 +263,7 @@ void Target::drawCube(float size) {
 
 	// Top face
 	glColor3f(0.6f, 0.6f, 0.6f); // Darker gray
+	setMaterialProperties(0.6, 0.6, 0.6);
 	glVertex3f(-halfSize, halfSize, halfSize);
 	glVertex3f(halfSize, halfSize, halfSize);
 	glVertex3f(halfSize, halfSize, -halfSize);
@@ -254,6 +271,7 @@ void Target::drawCube(float size) {
 
 	// Bottom face
 	glColor3f(0.6f, 0.6f, 0.6f); // Darker gray
+	setMaterialProperties(0.6, 0.6, 0.6);
 	glVertex3f(-halfSize, -halfSize, halfSize);
 	glVertex3f(halfSize, -halfSize, halfSize);
 	glVertex3f(halfSize, -halfSize, -halfSize);
@@ -261,6 +279,7 @@ void Target::drawCube(float size) {
 
 	// Right face
 	glColor3f(0.7f, 0.7f, 0.7f); // Medium gray
+	setMaterialProperties(0.7,0.7,0.7);
 	glVertex3f(halfSize, -halfSize, halfSize);
 	glVertex3f(halfSize, halfSize, halfSize);
 	glVertex3f(halfSize, halfSize, -halfSize);
@@ -268,6 +287,7 @@ void Target::drawCube(float size) {
 
 	// Left face
 	glColor3f(0.7f, 0.7f, 0.7f); // Medium gray
+	setMaterialProperties(0.7,0.7,0.7);
 	glVertex3f(-halfSize, -halfSize, halfSize);
 	glVertex3f(-halfSize, halfSize, halfSize);
 	glVertex3f(-halfSize, halfSize, -halfSize);
@@ -419,6 +439,7 @@ void drawCar() {
 
 	glPushMatrix();
 	glColor3f(1.0, 0.0, 0.0);
+	setMaterialProperties(1,0,0);
 	glTranslatef(0.0, -0.5, 0.0);
 	glScalef(1.5, 0.5, 3.0);
 	glutSolidCube(5.0);
@@ -427,6 +448,7 @@ void drawCar() {
 
 	glPushMatrix();
 	glColor3f(0.8, 0.0, 0.0);
+	setMaterialProperties(0.8,0,0);
 	glTranslatef(0.0, 2.0, 0.0);
 	glScalef(1.2, 0.5, 2.0);
 	glutSolidCube(5.0);
@@ -434,6 +456,7 @@ void drawCar() {
 	// Windows
 	glPushMatrix();
 	glColor3f(0.6, 0.8, 1.0);
+	setMaterialProperties(0.6,0.8,1.0);
 
 	// Left side windows
 	glBegin(GL_QUADS);
@@ -487,6 +510,7 @@ void drawCar() {
 	// Wheels
 	glPushMatrix();
 	glColor3f(0.0, 0.0, 0.0);
+	setMaterialProperties(0,0,0);
 
 	// Front-left wheel
 	glPushMatrix();
@@ -521,6 +545,7 @@ void drawCar() {
 	// Headlights
 	glPushMatrix();
 	glColor3f(1.0, 1.0, 0.5);
+	setMaterialProperties(1,1,0.5);
 
 	// front Left headlight
 	glPushMatrix();
@@ -552,6 +577,7 @@ void drawCar() {
 	//gray rectangles 
 	glPushMatrix();
 	glColor3f(0.2, 0.2, 0.2);
+	setMaterialProperties(0.2,0.2,0.2);
 
 	// Front gray rectangle 
 	glPushMatrix();
@@ -684,6 +710,30 @@ int CuboidCarCollision(float x, float z, float a)
 // Drawing routine.
 void drawScene(void)
 {
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	// Light property vectors.
+	float lightAmb[] = { 1, 0.5, 0.0, 1.0 };  
+	float lightDifAndSpec[] = { 1.0, 0.5, 0.0, 1.0 };
+	float lightPos[] = { 0, 0, 0.0, 10 };
+	float globAmb[] = { 0.3, 0.2, 0.1, 1.0 };
+
+	// Light0 properties.
+	glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDifAndSpec);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, lightDifAndSpec);
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globAmb); // Global ambient light.
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 1); // Enable local viewpoint
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glLoadIdentity();
+
+	// Light quadratic attenuation factor.
+	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0);
+
 	frameCount++; // Increment number of frames every redraw.
 	int i, j;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
