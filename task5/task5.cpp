@@ -547,18 +547,24 @@ void drawCar() {
 	glColor3f(1.0, 1.0, 0.5);
 	setMaterialProperties(1, 1, 0.5);
 
+
+	glDisable(GL_LIGHTING);
+
 	// front Left headlight
 	glPushMatrix();
-	glTranslatef(-2.0, 0.5, 7.5);
+	glLightfv(GL_LIGHT1, GL_POSITION, lightPosLeft);
+	glTranslatef(lightPosLeft[0], lightPosLeft[1], lightPosLeft[2]);
 	glutSolidSphere(0.5, 20, 20);
 	glPopMatrix();
 
 	// front Right headlight
 	glPushMatrix();
-	glTranslatef(2.0, 0.5, 7.5);
+	glLightfv(GL_LIGHT2, GL_POSITION, lightPosRight);
+	glTranslatef(lightPosRight[0], lightPosRight[1], lightPosRight[2]);
 	glutSolidSphere(0.5, 20, 20);
 	glPopMatrix();
-
+	
+	glEnable(GL_LIGHTING)
 
 	//// back Left headlight
 	//glPushMatrix();
@@ -711,12 +717,12 @@ int CuboidCarCollision(float x, float z, float a)
 void drawScene(void)
 {
 	
-	
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHT1);
 	glEnable(GL_LIGHT2);
 	
+	glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
 
 	// Light property vectors.
 	float lightAmb[] = { 1, 0.5, 0.0, 1.0 };
@@ -742,16 +748,14 @@ void drawScene(void)
 	glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmbLeft);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDifAndSpecLeft);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, lightDifAndSpecLeft);
-	glLightfv(GL_LIGHT1, GL_POSITION, lightPosLeft);
 	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spotDirection);
 	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0f);    // Spotlight angle
 	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0f);
 
-
 	glLightfv(GL_LIGHT2, GL_AMBIENT, lightAmbRight);
 	glLightfv(GL_LIGHT2, GL_DIFFUSE, lightDifAndSpecRight);
 	glLightfv(GL_LIGHT2, GL_SPECULAR, lightDifAndSpecRight);
-	glLightfv(GL_LIGHT2, GL_POSITION, lightPosRight);
+	
 	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spotDirection);
 	glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 30.0f);    // Spotlight angle
 	glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 2.0f);
@@ -767,7 +771,6 @@ void drawScene(void)
 
 	// Light quadratic attenuation factor.
 	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0);
-
 	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 1);
 	glLightf(GL_LIGHT2, GL_QUADRATIC_ATTENUATION, 1);
 
