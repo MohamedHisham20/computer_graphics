@@ -724,13 +724,14 @@ void drawScene(void)
 	float lightPos[] = { 0, 0, 0.0, 10 };
 	float globAmb[] = { 0.3, 0.2, 0.1, 1.0 };
 
-	float lightAmbLeft[] = { 1.0, 1.0, 0.0, 1.0 };         // Yellow ambient light
-	float lightDifAndSpecLeft[] = { 1.0, 1.0, 0.0, 1.0 };
-	float lightPosLeft[] = { -2, 0.5, 7.5, 1 };
+	float lightAmbLeft[] = { 0.0, 0.0, 1.0, 1.0 };         // Yellow ambient light
+	float lightDifAndSpecLeft[] = { 0.0, 0.0, 1.0, 1.0 };
+	float lightPosLeft[] = { -2.0, 0.5, 7.5, 1.0 };
 
-	float lightAmbRight[] = { 1.0, 1.0, 0.0, 1.0 };         // Yellow ambient light
-	float lightDifAndSpecRight[] = { 1.0, 1.0, 0.0, 1.0 };
-	float lightPosRight[] = { 2, 0.5, 7.5, 1 };
+	float lightAmbRight[] = { 0.0, 0.0, 1.0, 1.0 };         // Yellow ambient light
+	float lightDifAndSpecRight[] = { 0.0, 0.0, 1.0, 1.0 };
+	float lightPosRight[] = { 2.0, 0.5, 7.5, 1.0 };
+	GLfloat spotDirection[] = { 0.0f, 0.0f, -1.0f }; // Direction of the spotlight
 
 	// Light0 properties.
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
@@ -742,13 +743,18 @@ void drawScene(void)
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDifAndSpecLeft);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, lightDifAndSpecLeft);
 	glLightfv(GL_LIGHT1, GL_POSITION, lightPosLeft);
+	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spotDirection);
+	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0f);    // Spotlight angle
+	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0f);
 
 
 	glLightfv(GL_LIGHT2, GL_AMBIENT, lightAmbRight);
 	glLightfv(GL_LIGHT2, GL_DIFFUSE, lightDifAndSpecRight);
 	glLightfv(GL_LIGHT2, GL_SPECULAR, lightDifAndSpecRight);
 	glLightfv(GL_LIGHT2, GL_POSITION, lightPosRight);
-
+	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spotDirection);
+	glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 30.0f);    // Spotlight angle
+	glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 2.0f);
 
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globAmb); // Global ambient light.
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 1); // Enable local viewpoint
@@ -761,6 +767,9 @@ void drawScene(void)
 
 	// Light quadratic attenuation factor.
 	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0);
+
+	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 1);
+	glLightf(GL_LIGHT2, GL_QUADRATIC_ATTENUATION, 1);
 
 	frameCount++; // Increment number of frames every redraw.
 	int i, j;
