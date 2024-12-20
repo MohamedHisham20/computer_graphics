@@ -133,18 +133,18 @@ void setMaterialProperties(GLfloat r, GLfloat g, GLfloat b) {
 
 void menuCallback(int option) {
 	if (option == 0) {
-		id = 0; 
+		id = 0;
 	}
 	else if (option == 1) {
-		id = 1; 
+		id = 1;
 	}
-	glutPostRedisplay(); 
+	glutPostRedisplay();
 }
 void setupMenu() {
 	int menuID = glutCreateMenu(menuCallback);
-	glutAddMenuEntry("Grass Texture", 0);  
-	glutAddMenuEntry("Ground Texture", 1); 
-	glutAttachMenu(GLUT_RIGHT_BUTTON);     
+	glutAddMenuEntry("Grass Texture", 0);
+	glutAddMenuEntry("Ground Texture", 1);
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
 
@@ -215,7 +215,7 @@ void Cuboid::draw()
 		glPushMatrix();
 		glTranslatef(centerX, centerY, centerZ);
 		glColor3ubv(color);
-		setMaterialProperties(color[0]/128, color[1]/128, color[2]/128);
+		setMaterialProperties(color[0] / 128, color[1] / 128, color[2] / 128);
 		glutSolidCube(radius);
 		glPopMatrix();
 	}
@@ -255,7 +255,7 @@ void Target::drawCube(float size) {
 
 	// Back face
 	glColor3f(0.8f, 0.8f, 0.8f); // Light gray
-	setMaterialProperties(0.8,0.8,0.8);
+	setMaterialProperties(0.8, 0.8, 0.8);
 	glVertex3f(-halfSize, -halfSize, -halfSize);
 	glVertex3f(halfSize, -halfSize, -halfSize);
 	glVertex3f(halfSize, halfSize, -halfSize);
@@ -279,7 +279,7 @@ void Target::drawCube(float size) {
 
 	// Right face
 	glColor3f(0.7f, 0.7f, 0.7f); // Medium gray
-	setMaterialProperties(0.7,0.7,0.7);
+	setMaterialProperties(0.7, 0.7, 0.7);
 	glVertex3f(halfSize, -halfSize, halfSize);
 	glVertex3f(halfSize, halfSize, halfSize);
 	glVertex3f(halfSize, halfSize, -halfSize);
@@ -287,7 +287,7 @@ void Target::drawCube(float size) {
 
 	// Left face
 	glColor3f(0.7f, 0.7f, 0.7f); // Medium gray
-	setMaterialProperties(0.7,0.7,0.7);
+	setMaterialProperties(0.7, 0.7, 0.7);
 	glVertex3f(-halfSize, -halfSize, halfSize);
 	glVertex3f(-halfSize, halfSize, halfSize);
 	glVertex3f(-halfSize, halfSize, -halfSize);
@@ -439,7 +439,7 @@ void drawCar() {
 
 	glPushMatrix();
 	glColor3f(1.0, 0.0, 0.0);
-	setMaterialProperties(1,0,0);
+	setMaterialProperties(1, 0, 0);
 	glTranslatef(0.0, -0.5, 0.0);
 	glScalef(1.5, 0.5, 3.0);
 	glutSolidCube(5.0);
@@ -448,7 +448,7 @@ void drawCar() {
 
 	glPushMatrix();
 	glColor3f(0.8, 0.0, 0.0);
-	setMaterialProperties(0.8,0,0);
+	setMaterialProperties(0.8, 0, 0);
 	glTranslatef(0.0, 2.0, 0.0);
 	glScalef(1.2, 0.5, 2.0);
 	glutSolidCube(5.0);
@@ -456,7 +456,7 @@ void drawCar() {
 	// Windows
 	glPushMatrix();
 	glColor3f(0.6, 0.8, 1.0);
-	setMaterialProperties(0.6,0.8,1.0);
+	setMaterialProperties(0.6, 0.8, 1.0);
 
 	// Left side windows
 	glBegin(GL_QUADS);
@@ -510,7 +510,7 @@ void drawCar() {
 	// Wheels
 	glPushMatrix();
 	glColor3f(0.0, 0.0, 0.0);
-	setMaterialProperties(0,0,0);
+	setMaterialProperties(0, 0, 0);
 
 	// Front-left wheel
 	glPushMatrix();
@@ -545,7 +545,7 @@ void drawCar() {
 	// Headlights
 	glPushMatrix();
 	glColor3f(1.0, 1.0, 0.5);
-	setMaterialProperties(1,1,0.5);
+	setMaterialProperties(1, 1, 0.5);
 
 	// front Left headlight
 	glPushMatrix();
@@ -577,7 +577,7 @@ void drawCar() {
 	//gray rectangles 
 	glPushMatrix();
 	glColor3f(0.2, 0.2, 0.2);
-	setMaterialProperties(0.2,0.2,0.2);
+	setMaterialProperties(0.2, 0.2, 0.2);
 
 	// Front gray rectangle 
 	glPushMatrix();
@@ -710,13 +710,27 @@ int CuboidCarCollision(float x, float z, float a)
 // Drawing routine.
 void drawScene(void)
 {
+	
+	
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHT2);
+	
+
 	// Light property vectors.
-	float lightAmb[] = { 1, 0.5, 0.0, 1.0 };  
+	float lightAmb[] = { 1, 0.5, 0.0, 1.0 };
 	float lightDifAndSpec[] = { 1.0, 0.5, 0.0, 1.0 };
 	float lightPos[] = { 0, 0, 0.0, 10 };
 	float globAmb[] = { 0.3, 0.2, 0.1, 1.0 };
+
+	float lightAmbLeft[] = { 1.0, 1.0, 0.0, 1.0 };         // Yellow ambient light
+	float lightDifAndSpecLeft[] = { 1.0, 1.0, 0.0, 1.0 };
+	float lightPosLeft[] = { -2, 0.5, 7.5, 1 };
+
+	float lightAmbRight[] = { 1.0, 1.0, 0.0, 1.0 };         // Yellow ambient light
+	float lightDifAndSpecRight[] = { 1.0, 1.0, 0.0, 1.0 };
+	float lightPosRight[] = { 2, 0.5, 7.5, 1 };
 
 	// Light0 properties.
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
@@ -724,8 +738,22 @@ void drawScene(void)
 	glLightfv(GL_LIGHT0, GL_SPECULAR, lightDifAndSpec);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 
+	glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmbLeft);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDifAndSpecLeft);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, lightDifAndSpecLeft);
+	glLightfv(GL_LIGHT1, GL_POSITION, lightPosLeft);
+
+
+	glLightfv(GL_LIGHT2, GL_AMBIENT, lightAmbRight);
+	glLightfv(GL_LIGHT2, GL_DIFFUSE, lightDifAndSpecRight);
+	glLightfv(GL_LIGHT2, GL_SPECULAR, lightDifAndSpecRight);
+	glLightfv(GL_LIGHT2, GL_POSITION, lightPosRight);
+
+
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globAmb); // Global ambient light.
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 1); // Enable local viewpoint
+
+
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -766,7 +794,7 @@ void drawScene(void)
 		}
 	}
 
-	
+
 
 
 	// Draw spacecraft.
