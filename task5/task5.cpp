@@ -105,7 +105,7 @@ static int width, height; // Size of the OpenGL window.
 static float angle = 0.0; // Angle of the spacecraft.
 static float xVal = 0, zVal = 0; // Co-ordinates of the spacecraft.
 static int isCollision = 0; // Is there collision between the spacecraft and an Cuboid?
-static int isWinner = 0; // The car hit the target
+static int isWinner = 0; // The car hit the targetdraw
 static unsigned int carSpace; // Display lists base index.
 static int frameCount = 0; // Number of frames
 static int gameState = 0; // 0 = playing, 1 = won.
@@ -437,173 +437,195 @@ void drawGround() {
 
 void drawCar() {
 
-	glPushMatrix();
-	glColor3f(1.0, 0.0, 0.0);
-	setMaterialProperties(1, 0, 0);
-	glTranslatef(0.0, -0.5, 0.0);
-	glScalef(1.5, 0.5, 3.0);
-	glutSolidCube(5.0);
-	glPopMatrix();
+
+		glPushMatrix();
+		glColor3f(1.0, 0.0, 0.0);
+		setMaterialProperties(1, 0, 0);
+		glTranslatef(0.0, -0.5, 0.0);
+		glScalef(1.5, 0.5, 3.0);
+		glutSolidCube(5.0);
+		glPopMatrix();
 
 
-	glPushMatrix();
-	glColor3f(0.8, 0.0, 0.0);
-	setMaterialProperties(0.8, 0, 0);
-	glTranslatef(0.0, 2.0, 0.0);
-	glScalef(1.2, 0.5, 2.0);
-	glutSolidCube(5.0);
+		glPushMatrix();
+		glColor3f(0.8, 0.0, 0.0);
+		setMaterialProperties(0.8, 0, 0);
+		glTranslatef(0.0, 2.0, 0.0);
+		glScalef(1.2, 0.5, 2.0);
+		glutSolidCube(5.0);
 
-	// Windows
-	glPushMatrix();
-	glColor3f(0.6, 0.8, 1.0);
-	setMaterialProperties(0.6, 0.8, 1.0);
+		// Windows
+		glPushMatrix();
+		glColor3f(0.6, 0.8, 1.0);
+		setMaterialProperties(0.6, 0.8, 1.0);
 
-	// Left side windows
-	glBegin(GL_QUADS);
+		// Left side windows
+		glBegin(GL_QUADS);
 
-	// Front-left window
-	glVertex3f(-2.6, 2.5, 2.0);
-	glVertex3f(-2.6, 0.0, 2.0);
-	glVertex3f(-2.6, 0.0, 0.7);
-	glVertex3f(-2.6, 2.5, 0.7);
+		// Front-left window
+		glVertex3f(-2.6, 2.5, 2.0);
+		glVertex3f(-2.6, 0.0, 2.0);
+		glVertex3f(-2.6, 0.0, 0.7);
+		glVertex3f(-2.6, 2.5, 0.7);
 
-	// Rear-left window
-	glVertex3f(-2.6, 2.5, -0.7);
-	glVertex3f(-2.6, 0.0, -0.7);
-	glVertex3f(-2.6, 0.0, -2.0);
-	glVertex3f(-2.6, 2.5, -2.0);
-	glEnd();
+		// Rear-left window
+		glVertex3f(-2.6, 2.5, -0.7);
+		glVertex3f(-2.6, 0.0, -0.7);
+		glVertex3f(-2.6, 0.0, -2.0);
+		glVertex3f(-2.6, 2.5, -2.0);
+		glEnd();
 
-	// Right side windows
-	glBegin(GL_QUADS);
-	// Front-right window
-	glVertex3f(2.6, 2.5, 2.0);
-	glVertex3f(2.6, 0.0, 2.0);
-	glVertex3f(2.6, 0.0, 0.7);
-	glVertex3f(2.6, 2.5, 0.7);
+		// Right side windows
+		glBegin(GL_QUADS);
+		// Front-right window
+		glVertex3f(2.6, 2.5, 2.0);
+		glVertex3f(2.6, 0.0, 2.0);
+		glVertex3f(2.6, 0.0, 0.7);
+		glVertex3f(2.6, 2.5, 0.7);
 
-	// Rear-right window
-	glVertex3f(2.6, 2.5, -0.7);
-	glVertex3f(2.6, 0.0, -0.7);
-	glVertex3f(2.6, 0.0, -2.0);
-	glVertex3f(2.6, 2.5, -2.0);
-	glEnd();
+		// Rear-right window
+		glVertex3f(2.6, 2.5, -0.7);
+		glVertex3f(2.6, 0.0, -0.7);
+		glVertex3f(2.6, 0.0, -2.0);
+		glVertex3f(2.6, 2.5, -2.0);
+		glEnd();
 
-	// Front window
-	glBegin(GL_POLYGON);
-	glVertex3f(-2.5, 1.5, 2.6);
-	glVertex3f(2.5, 1.5, 2.6);
-	glVertex3f(2.5, -1.5, 2.6);
-	glVertex3f(-2.5, -1.5, 2.6);
-	glEnd();
+		// Front window
+		glBegin(GL_POLYGON);
+		glVertex3f(-2.5, 1.5, 2.6);
+		glVertex3f(2.5, 1.5, 2.6);
+		glVertex3f(2.5, -1.5, 2.6);
+		glVertex3f(-2.5, -1.5, 2.6);
+		glEnd();
 
-	// back window
-	glBegin(GL_POLYGON);
-	glVertex3f(-2.4, 1.5, -2.6);
-	glVertex3f(2.4, 1.5, -2.6);
-	glVertex3f(2.4, -1.5, -2.6);
-	glVertex3f(-2.4, -1.5, -2.6);
-	glEnd();
+		// back window
+		glBegin(GL_POLYGON);
+		glVertex3f(-2.4, 1.5, -2.6);
+		glVertex3f(2.4, 1.5, -2.6);
+		glVertex3f(2.4, -1.5, -2.6);
+		glVertex3f(-2.4, -1.5, -2.6);
+		glEnd();
 
-	glPopMatrix();
-	glPopMatrix();
-	// Wheels
-	glPushMatrix();
-	glColor3f(0.0, 0.0, 0.0);
-	setMaterialProperties(0, 0, 0);
+		glPopMatrix();
+		glPopMatrix();
+		// Wheels
+		glPushMatrix();
+		glColor3f(0.0, 0.0, 0.0);
+		setMaterialProperties(0, 0, 0);
 
-	// Front-left wheel
-	glPushMatrix();
-	glTranslatef(-3.0, -2.5, 7.0);
-	glRotatef(90, 0, 1, 0);
-	glutSolidTorus(0.5, 1.0, 20, 20);
-	glPopMatrix();
+		// Front-left wheel
+		glPushMatrix();
+		glTranslatef(-3.0, -2.5, 7.0);
+		glRotatef(90, 0, 1, 0);
+		glutSolidTorus(0.5, 1.0, 20, 20);
+		glPopMatrix();
 
-	// Front-right wheel
-	glPushMatrix();
-	glTranslatef(3.0, -2.5, 7.0);
-	glRotatef(90, 0, 1, 0);
-	glutSolidTorus(0.5, 1.0, 20, 20);
-	glPopMatrix();
+		// Front-right wheel
+		glPushMatrix();
+		glTranslatef(3.0, -2.5, 7.0);
+		glRotatef(90, 0, 1, 0);
+		glutSolidTorus(0.5, 1.0, 20, 20);
+		glPopMatrix();
 
-	// Rear-left wheel
-	glPushMatrix();
-	glTranslatef(-3.0, -2.5, -7.0);
-	glRotatef(90, 0, 1, 0);
-	glutSolidTorus(0.5, 1.0, 20, 20);
-	glPopMatrix();
+		// Rear-left wheel
+		glPushMatrix();
+		glTranslatef(-3.0, -2.5, -7.0);
+		glRotatef(90, 0, 1, 0);
+		glutSolidTorus(0.5, 1.0, 20, 20);
+		glPopMatrix();
 
-	// Rear-right wheel
-	glPushMatrix();
-	glTranslatef(3.0, -2.5, -7.0);
-	glRotatef(90, 0, 1, 0);
-	glutSolidTorus(0.5, 1.0, 20, 20);
-	glPopMatrix();
+		// Rear-right wheel
+		glPushMatrix();
+		glTranslatef(3.0, -2.5, -7.0);
+		glRotatef(90, 0, 1, 0);
+		glutSolidTorus(0.5, 1.0, 20, 20);
+		glPopMatrix();
 
-	glPopMatrix();
+		glPopMatrix();
 
-	// Headlights
-	glPushMatrix();
-	glColor3f(1.0, 1.0, 0.5);
-	setMaterialProperties(1, 1, 0.5);
+		// Headlights
+		glPushMatrix();
+		glColor3f(1.0, 1.0, 0.5);
+		setMaterialProperties(1, 1, 0.5);
 
 
-	glDisable(GL_LIGHTING);
 
-	// front Left headlight
-	glPushMatrix();
-	glLightfv(GL_LIGHT1, GL_POSITION, lightPosLeft);
-	glTranslatef(lightPosLeft[0], lightPosLeft[1], lightPosLeft[2]);
-	glutSolidSphere(0.5, 20, 20);
-	glPopMatrix();
 
-	// front Right headlight
-	glPushMatrix();
-	glLightfv(GL_LIGHT2, GL_POSITION, lightPosRight);
-	glTranslatef(lightPosRight[0], lightPosRight[1], lightPosRight[2]);
-	glutSolidSphere(0.5, 20, 20);
-	glPopMatrix();
-	
-	glEnable(GL_LIGHTING)
+		// front Left headlight
+		glPushMatrix();
+		glutSolidSphere(0.5, 20, 20);
+		glPopMatrix();
 
-	//// back Left headlight
-	//glPushMatrix();
-	//glTranslatef(-2.0, 0.5, -7.5);
-	//glutSolidSphere(0.5, 20, 20);
-	//glPopMatrix();
+		// front Right headlight
+		glPushMatrix();
+		glutSolidSphere(0.5, 20, 20);
+		glPopMatrix();
 
-	//// back Right headlight
-	//glPushMatrix();
-	//glTranslatef(2.0, 0.5, -7.5);
-	//glutSolidSphere(0.5, 20, 20);
-	//glPopMatrix();
+		glPopMatrix();
 
-	glPopMatrix();
+		// Spotlights for the headlights
+		GLfloat lightPosLeft[] = { -2.0, 0.5, 7.5, 1.0 }; // Left headlight position
+		GLfloat lightPosRight[] = { 2.0, 0.5, 7.5, 1.0 }; // Right headlight position
+		GLfloat lightDir[] = { 0.0, -0.1, 1.0 };          // Direction forward
+		GLfloat lightColor[] = { 0.0, 0.0, 1.0, 1.0 };    // Blue light
 
-	//gray rectangles 
-	glPushMatrix();
-	glColor3f(0.2, 0.2, 0.2);
-	setMaterialProperties(0.2, 0.2, 0.2);
+		glEnable(GL_LIGHT1);
+		glLightfv(GL_LIGHT1, GL_POSITION, lightPosLeft);
+		glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, lightDir);
+		glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 20.0);
+		glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 50.0);
+		glLightfv(GL_LIGHT1, GL_DIFFUSE, lightColor);
+		glLightfv(GL_LIGHT1, GL_SPECULAR, lightColor);
 
-	// Front gray rectangle 
-	glPushMatrix();
-	glTranslatef(0.0, -1.0, 7.5);
-	glScalef(1.5, 0.3, 0.1);
-	glutSolidCube(5.0);
-	glPopMatrix();
+		glEnable(GL_LIGHT2);
+		glLightfv(GL_LIGHT2, GL_POSITION, lightPosRight);
+		glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, lightDir);
+		glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 20.0);
+		glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 50.0);
+		glLightfv(GL_LIGHT2, GL_DIFFUSE, lightColor);
+		glLightfv(GL_LIGHT2, GL_SPECULAR, lightColor);
 
-	// back gray rectangle
-	glPushMatrix();
-	glTranslatef(0.0, -1.0, -7.5);
-	glScalef(1.5, 0.3, 0.1);
-	glutSolidCube(5.0);
-	glPopMatrix();
-	glPopMatrix();
+		//gray rectangles 
+		glPushMatrix();
+		glColor3f(0.2, 0.2, 0.2);
+		setMaterialProperties(0.2, 0.2, 0.2);
+
+		// Front gray rectangle 
+		glPushMatrix();
+		glTranslatef(0.0, -1.0, 7.5);
+		glScalef(1.5, 0.3, 0.1);
+		glutSolidCube(5.0);
+		glPopMatrix();
+
+		// back gray rectangle
+		glPushMatrix();
+		glTranslatef(0.0, -1.0, -7.5);
+		glScalef(1.5, 0.3, 0.1);
+		glutSolidCube(5.0);
+		glPopMatrix();
+		glPopMatrix();
 }
 
 // Initialization routine.
 void setup(void)
 {
+	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
+
+	// Global ambient light
+	GLfloat globalAmbient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbient);
+
+	// Initialize light 0 (for ambient/diffuse lighting)
+	GLfloat ambientLight[] = { 0.3f, 0.3f, 0.3f, 1.0f };
+	GLfloat diffuseLight[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+	glEnable(GL_LIGHT0);
+
+	// Spotlight setup is moved to drawCar()
+
+	glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 	int i, j;
 
 	carSpace = glGenLists(1);
@@ -719,8 +741,8 @@ void drawScene(void)
 	
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);
-	glEnable(GL_LIGHT2);
+	/*glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHT2);*/
 	
 	glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR);
 
@@ -730,14 +752,13 @@ void drawScene(void)
 	float lightPos[] = { 0, 0, 0.0, 10 };
 	float globAmb[] = { 0.3, 0.2, 0.1, 1.0 };
 
-	float lightAmbLeft[] = { 0.0, 0.0, 1.0, 1.0 };         // Yellow ambient light
+	float lightAmbLeft[] = { 0.0, 0.0, 1.0, 1.0 };        
 	float lightDifAndSpecLeft[] = { 0.0, 0.0, 1.0, 1.0 };
-	float lightPosLeft[] = { -2.0, 0.5, 7.5, 1.0 };
+	
 
-	float lightAmbRight[] = { 0.0, 0.0, 1.0, 1.0 };         // Yellow ambient light
+	float lightAmbRight[] = { 0.0, 0.0, 1.0, 1.0 };         
 	float lightDifAndSpecRight[] = { 0.0, 0.0, 1.0, 1.0 };
-	float lightPosRight[] = { 2.0, 0.5, 7.5, 1.0 };
-	GLfloat spotDirection[] = { 0.0f, 0.0f, -1.0f }; // Direction of the spotlight
+
 
 	// Light0 properties.
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmb);
@@ -745,20 +766,16 @@ void drawScene(void)
 	glLightfv(GL_LIGHT0, GL_SPECULAR, lightDifAndSpec);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 
-	glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmbLeft);
+	/*glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmbLeft);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDifAndSpecLeft);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, lightDifAndSpecLeft);
-	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spotDirection);
-	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0f);    // Spotlight angle
-	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0f);
+
 
 	glLightfv(GL_LIGHT2, GL_AMBIENT, lightAmbRight);
 	glLightfv(GL_LIGHT2, GL_DIFFUSE, lightDifAndSpecRight);
-	glLightfv(GL_LIGHT2, GL_SPECULAR, lightDifAndSpecRight);
+	glLightfv(GL_LIGHT2, GL_SPECULAR, lightDifAndSpecRight);*/
 	
-	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spotDirection);
-	glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 30.0f);    // Spotlight angle
-	glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 2.0f);
+	
 
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globAmb); // Global ambient light.
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 1); // Enable local viewpoint
