@@ -214,7 +214,7 @@ void Cuboid::draw()
 	{
 		glPushMatrix();
 		glTranslatef(centerX, centerY, centerZ);
-		glColor3ubv(color);
+		
 		setMaterialProperties(color[0] / 128, color[1] / 128, color[2] / 128);
 		glutSolidCube(radius);
 		glPopMatrix();
@@ -227,7 +227,7 @@ Target::Target(float x, float y, float z, float r) : Cuboid(x, y, z, r, 0, 0, 0)
 // Function to draw a circle.
 void Target::drawCircle(float radius, unsigned char colorR, unsigned char colorG, unsigned char colorB)
 {
-	glColor3ub(colorR, colorG, colorB);
+	
 	setMaterialProperties(colorR / 15, colorG / 15, colorB / 15);
 	glBegin(GL_TRIANGLE_FAN);
 	glVertex3f(0.0, 0.0, 0.0);
@@ -246,7 +246,7 @@ void Target::drawCube(float size) {
 	glBegin(GL_POLYGON);
 
 	// Front face (with circles)
-	glColor3f(1.0f, 1.0f, 1.0f); // White for the base of the face
+	
 	setMaterialProperties(1, 1, 1);
 	glVertex3f(-halfSize, -halfSize, halfSize);
 	glVertex3f(halfSize, -halfSize, halfSize);
@@ -254,7 +254,7 @@ void Target::drawCube(float size) {
 	glVertex3f(-halfSize, halfSize, halfSize);
 
 	// Back face
-	glColor3f(0.8f, 0.8f, 0.8f); // Light gray
+	
 	setMaterialProperties(0.8, 0.8, 0.8);
 	glVertex3f(-halfSize, -halfSize, -halfSize);
 	glVertex3f(halfSize, -halfSize, -halfSize);
@@ -262,7 +262,7 @@ void Target::drawCube(float size) {
 	glVertex3f(-halfSize, halfSize, -halfSize);
 
 	// Top face
-	glColor3f(0.6f, 0.6f, 0.6f); // Darker gray
+	
 	setMaterialProperties(0.6, 0.6, 0.6);
 	glVertex3f(-halfSize, halfSize, halfSize);
 	glVertex3f(halfSize, halfSize, halfSize);
@@ -270,7 +270,7 @@ void Target::drawCube(float size) {
 	glVertex3f(-halfSize, halfSize, -halfSize);
 
 	// Bottom face
-	glColor3f(0.6f, 0.6f, 0.6f); // Darker gray
+	
 	setMaterialProperties(0.6, 0.6, 0.6);
 	glVertex3f(-halfSize, -halfSize, halfSize);
 	glVertex3f(halfSize, -halfSize, halfSize);
@@ -278,7 +278,7 @@ void Target::drawCube(float size) {
 	glVertex3f(-halfSize, -halfSize, -halfSize);
 
 	// Right face
-	glColor3f(0.7f, 0.7f, 0.7f); // Medium gray
+	
 	setMaterialProperties(0.7, 0.7, 0.7);
 	glVertex3f(halfSize, -halfSize, halfSize);
 	glVertex3f(halfSize, halfSize, halfSize);
@@ -286,7 +286,7 @@ void Target::drawCube(float size) {
 	glVertex3f(halfSize, -halfSize, -halfSize);
 
 	// Left face
-	glColor3f(0.7f, 0.7f, 0.7f); // Medium gray
+	
 	setMaterialProperties(0.7, 0.7, 0.7);
 	glVertex3f(-halfSize, -halfSize, halfSize);
 	glVertex3f(-halfSize, halfSize, halfSize);
@@ -448,7 +448,7 @@ void drawCar() {
 
 
 		glPushMatrix();
-		glColor3f(0.8, 0.0, 0.0);
+		
 		setMaterialProperties(0.8, 0, 0);
 		glTranslatef(0.0, 2.0, 0.0);
 		glScalef(1.2, 0.5, 2.0);
@@ -456,7 +456,7 @@ void drawCar() {
 
 		// Windows
 		glPushMatrix();
-		glColor3f(0.6, 0.8, 1.0);
+
 		setMaterialProperties(0.6, 0.8, 1.0);
 
 		// Left side windows
@@ -510,7 +510,7 @@ void drawCar() {
 		glPopMatrix();
 		// Wheels
 		glPushMatrix();
-		glColor3f(0.0, 0.0, 0.0);
+		
 		setMaterialProperties(0, 0, 0);
 
 		// Front-left wheel
@@ -545,7 +545,7 @@ void drawCar() {
 
 		// Headlights
 		glPushMatrix();
-		glColor3f(1.0, 1.0, 0.5);
+		
 		setMaterialProperties(1, 1, 0.5);
 
 
@@ -567,7 +567,7 @@ void drawCar() {
 		GLfloat lightPosLeft[] = { -2.0, 0.5, 7.5, 1.0 }; // Left headlight position
 		GLfloat lightPosRight[] = { 2.0, 0.5, 7.5, 1.0 }; // Right headlight position
 		GLfloat lightDir[] = { 0.0, -0.1, 1.0 };          // Direction forward
-		GLfloat lightColor[] = { 0.0, 0.0, 1.0, 1.0 };    // Blue light
+		GLfloat lightColor[] = { 1.0, 1.0, 1.0, 1.0 };    // Blue light
 
 		glEnable(GL_LIGHT1);
 		glLightfv(GL_LIGHT1, GL_POSITION, lightPosLeft);
@@ -585,9 +585,12 @@ void drawCar() {
 		glLightfv(GL_LIGHT2, GL_DIFFUSE, lightColor);
 		glLightfv(GL_LIGHT2, GL_SPECULAR, lightColor);
 
+		glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 7);
+		glLightf(GL_LIGHT2, GL_QUADRATIC_ATTENUATION, 7);
+
 		//gray rectangles 
 		glPushMatrix();
-		glColor3f(0.2, 0.2, 0.2);
+	
 		setMaterialProperties(0.2, 0.2, 0.2);
 
 		// Front gray rectangle 
@@ -681,7 +684,7 @@ void setup(void)
 	glEnable(GL_TEXTURE_2D);
 
 	glEnable(GL_DEPTH_TEST);
-	glClearColor(0.5098f, 0.6588f, 0.6980f, 1.0f);
+	glClearColor(0.925f, 0.619f, 0.639f, 1.0f);
 	glutTimerFunc(0, frameCounter, 0);
 }
 
@@ -788,8 +791,7 @@ void drawScene(void)
 
 	// Light quadratic attenuation factor.
 	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0);
-	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 1);
-	glLightf(GL_LIGHT2, GL_QUADRATIC_ATTENUATION, 1);
+
 
 	frameCount++; // Increment number of frames every redraw.
 	int i, j;
